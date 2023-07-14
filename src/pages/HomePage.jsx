@@ -166,7 +166,7 @@ export default function HomePage() {
           </OptionIcon>
           Perfil
         </OptionItem>
-        <OptionItem>
+        <OptionItem onClick={handleLogout}>
           <OptionIcon>
             <BiExit />
           </OptionIcon>
