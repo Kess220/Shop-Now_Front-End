@@ -7,41 +7,40 @@ import Logo from "/store.png";
 
 export default function SignUpPage() {
   const navigate = useNavigate();
-  const [nome, setNome] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
-  const [confirmarSenha, setConfirmarSenha] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleNomeChange = (event) => {
-    setNome(event.target.value);
+  const handleNameChange = (event) => {
+    setName(event.target.value);
   };
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
 
-  const handleSenhaChange = (event) => {
-    setSenha(event.target.value);
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
   };
 
-  const handleConfirmarSenhaChange = (event) => {
-    setConfirmarSenha(event.target.value);
+  const handleConfirmPasswordChange = (event) => {
+    setConfirmPassword(event.target.value);
   };
 
-  const handleCadastroSubmit = async (event) => {
+  const handleSignUpSubmit = async (event) => {
     event.preventDefault();
 
-    if (senha !== confirmarSenha) {
+    if (password !== confirmPassword) {
       alert("As senhas não coincidem.");
       return;
     }
 
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/cadastro`, {
-        nome,
+      await axios.post(`${import.meta.env.VITE_API_URL}sign-up`, {
+        name,
         email,
-        senha,
-        confirmarSenha,
+        password,
       });
 
       // Redirecionar o usuário para a página de login
@@ -61,13 +60,13 @@ export default function SignUpPage() {
   return (
     <SignUpContainer>
       <LogoImage src={Logo} alt="Logo" />
-      <form onSubmit={handleCadastroSubmit}>
+      <form onSubmit={handleSignUpSubmit}>
         <input
           placeholder="Nome"
           data-test="name"
           type="text"
-          value={nome}
-          onChange={handleNomeChange}
+          value={name}
+          onChange={handleNameChange}
         />
         <input
           placeholder="E-mail"
@@ -81,16 +80,16 @@ export default function SignUpPage() {
           data-test="password"
           type="password"
           autoComplete="new-password"
-          value={senha}
-          onChange={handleSenhaChange}
+          value={password}
+          onChange={handlePasswordChange}
         />
         <input
           placeholder="Confirme a senha"
           data-test="conf-password"
           type="password"
           autoComplete="new-password"
-          value={confirmarSenha}
-          onChange={handleConfirmarSenhaChange}
+          value={confirmPassword}
+          onChange={handleConfirmPasswordChange}
         />
         <StyledButton data-test="sign-up-submit" type="submit">
           Cadastrar

@@ -7,17 +7,20 @@ import axios from "axios";
 export default function SignInPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}`, {
-        email,
-        senha,
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}login`,
+        {
+          email,
+          password,
+        }
+      );
 
       const { token } = response.data;
 
@@ -55,8 +58,8 @@ export default function SignInPage() {
           data-test="password"
           type="password"
           autoComplete="new-password"
-          value={senha}
-          onChange={(e) => setSenha(e.target.value)}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
         <StyledButton data-test="sign-in-submit" type="submit">
           Login
