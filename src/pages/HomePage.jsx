@@ -13,9 +13,11 @@ export default function HomePage() {
   const [transactions, setTransactions] = useState([]);
   const [balance, setBalance] = useState(0);
   const [showOptions, setShowOptions] = useState(false);
+  const [logoClicked, setLogoClicked] = useState(false);
 
   const handleLogoClick = () => {
     setShowOptions(!showOptions);
+    setLogoClicked(!logoClicked);
   };
 
   const navigate = useNavigate();
@@ -140,7 +142,7 @@ export default function HomePage() {
     <HomeContainer>
       <Header>
         <h1 data-test="user-name">Shop Now</h1>
-        <LogoContainer onClick={handleLogoClick}>
+        <LogoContainer onClick={handleLogoClick} logoClicked={logoClicked}>
           <LogoImage src={Logo} alt="Logo" />
         </LogoContainer>
       </Header>
@@ -201,11 +203,20 @@ const ProductContainer = styled.div`
 
 const LogoContainer = styled.div`
   cursor: pointer;
+  transform: ${(props) => (props.logoClicked ? "scale(1.1)" : "none")};
+  transition: transform 0.3s ease;
+
+  &:active {
+    transform: scale(1.2);
+  }
 `;
 
 const LogoImage = styled.img`
   width: 80px;
   height: 80px;
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 
 const OptionsContainer = styled.div`
