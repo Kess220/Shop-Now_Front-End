@@ -2,71 +2,35 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { BiExit } from "react-icons/bi";
 import { RiShoppingCartLine } from "react-icons/ri";
-import { BsPersonFill } from "react-icons/bs";
+import { BsInfoCircle } from "react-icons/bs";
+
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "/store.png";
 import ProductCard from "../components/ProductCard";
+import { useTransition, animated } from "react-spring";
 
 export default function HomePage() {
   const [userName, setUserName] = useState("");
-  const [transactions, setTransactions] = useState([]);
-  const [balance, setBalance] = useState(0);
   const [showOptions, setShowOptions] = useState(false);
   const [logoClicked, setLogoClicked] = useState(false);
+  const [products, setProducts] = useState([]);
 
   const handleLogoClick = () => {
     setShowOptions(!showOptions);
     setLogoClicked(!logoClicked);
   };
 
-  const navigate = useNavigate();
+  const handleOutsideClick = () => {
+    if (showOptions) {
+      setShowOptions(false);
+      setLogoClicked(false);
+    }
+  };
 
-  const products = [
-    {
-      id: 1,
-      name: "Product 1",
-      price: 29.99,
-      image: Logo,
-      description: "Lorem ipsum dolor sit amet...",
-    },
-    {
-      id: 2,
-      name: "Product 2",
-      price: 19.99,
-      image: Logo,
-      description: "Lorem ipsum dolor sit amet...",
-    },
-    {
-      id: 3,
-      name: "Product 3",
-      price: 39.99,
-      image: Logo,
-      description: "Lorem ipsum dolor sit amet...",
-    },
-    {
-      id: 4,
-      name: "Product 4",
-      price: 24.99,
-      image: Logo,
-      description: "Lorem ipsum dolor sit amet...",
-    },
-    {
-      id: 5,
-      name: "Product 5",
-      price: 14.99,
-      image: Logo,
-      description: "Lorem ipsum dolor sit amet...",
-    },
-    {
-      id: 6,
-      name: "Product 6",
-      price: 49.99,
-      image: Logo,
-      description: "Lorem ipsum dolor sit amet...",
-    },
-    // Adicione mais produtos aqui
-  ];
+  const navigate = useNavigate();
+  const profileImageUrl =
+    "https://ogimg.infoglobo.com.br/in/25339584-79f-886/FT1086A/laika-labradora-praia.jpg";
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -95,42 +59,22 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    const fetchTransactions = async () => {
+    const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/transacoes`,
+          `${import.meta.env.VITE_API_URL}produtos`,
           {
             headers: { Authorization: localStorage.getItem("token") },
           }
         );
-        const transactionsData = response.data || [];
-        setTransactions(transactionsData);
-
-        let saldo = 0;
-        transactionsData.forEach((transaction) => {
-          if (transaction.tipo === "entrada") {
-            saldo += parseFloat(
-              transaction.valor.replace(/\./g, "").replace(",", ".")
-            );
-          } else if (transaction.tipo === "saida") {
-            saldo -= parseFloat(
-              transaction.valor.replace(/\./g, "").replace(",", ".")
-            );
-          }
-        });
-
-        const saldoFormatado = saldo.toLocaleString("pt-BR", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        });
-
-        setBalance(saldoFormatado);
+        const productsData = response.data || [];
+        setProducts(productsData);
       } catch (error) {
-        console.error("Erro ao obter as transações:", error);
+        console.error("Erro ao obter os produtos:", error);
       }
     };
 
-    fetchTransactions();
+    fetchProducts();
   }, []);
 
   const handleLogout = () => {
@@ -149,39 +93,68 @@ export default function HomePage() {
 
       <ProductContainer>
         {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard key={product._id.$oid} product={product} />
         ))}
       </ProductContainer>
 
+      {showOptions && <Overlay onClick={handleOutsideClick} />}
+
       <OptionsContainer show={showOptions}>
-        <OptionItem>
+        <ProfileContainer style={{ marginBottom: "16px" }}>
+          <ProfileImageContainer>
+            <ProfileImage src={profileImageUrl} alt="Profile" />
+          </ProfileImageContainer>
+        </ProfileContainer>
+        <OptionIconContainer>
           <OptionIcon>
             <RiShoppingCartLine />
           </OptionIcon>
-          Carrinho
-        </OptionItem>
-        <OptionItem>
-          <OptionIcon>
-            <BsPersonFill />
-          </OptionIcon>
-          Perfil
-        </OptionItem>
-        <OptionItem onClick={handleLogout}>
+        </OptionIconContainer>
+
+        <OptionIconContainer onClick={handleLogout}>
           <OptionIcon>
             <BiExit />
           </OptionIcon>
-          Logout
-        </OptionItem>
+        </OptionIconContainer>
+        <OptionIconContainer>
+          <OptionIcon>
+            <BsInfoCircle />
+          </OptionIcon>
+        </OptionIconContainer>
       </OptionsContainer>
     </HomeContainer>
   );
 }
+
+const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 2;
+`;
 
 const HomeContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: calc(100vh - 50px);
   overflow: auto;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.795);
+    opacity: ${(props) => (props.showOptions ? 1 : 0)};
+    pointer-events: ${(props) => (props.showOptions ? "auto" : "none")};
+    transition: opacity 0.3s ease;
+  }
 `;
 
 const Header = styled.header`
@@ -224,23 +197,47 @@ const OptionsContainer = styled.div`
   top: 0;
   left: ${(props) => (props.show ? "0" : "-100%")};
   height: 100vh;
-  width: 200px;
-  background-color: #7a6bbc;
+  width: 60px;
+  background-color: rgba(122, 107, 188, 0.9);
   border-radius: 0 4px 4px 0;
   padding: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: left 0.3s ease;
-  z-index: 1;
+  transition: left 0.3s ease, background-color 0.3s ease;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
-const OptionItem = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 4px;
+const OptionIconContainer = styled.div`
+  margin-bottom: 26px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 
 const OptionIcon = styled.span`
-  margin-right: 8px;
   color: white;
-  font-size: 16px;
+  font-size: 24px;
+`;
+
+const ProfileContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const ProfileImageContainer = styled.div`
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  border-radius: 50%;
+`;
+
+const ProfileImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 `;
