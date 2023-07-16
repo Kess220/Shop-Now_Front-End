@@ -1,33 +1,31 @@
 import React from "react";
 import styled from "styled-components";
-import  {trashOutline}  from 'ionicons/icons';
-import  {IonIcon} from '@ionic/react';
+import { trashOutline } from 'ionicons/icons';
+import { IonIcon } from '@ionic/react';
 
-
-const CartItem = ({item}) => {
-    return (
-        <HomeContainer>
-            <ProductContainer>
-                <ProductImage src="https://imgs.extra.com.br/55014765/1xg.jpg" alt="foto" />
-                <ProductInfo>
-                    <ProductName>Samsung galaxy s20</ProductName>
-                    <Price>$200</Price>
-                </ProductInfo>
-
-                <QuantityContainer>
-                    <QuantityButton>-</QuantityButton>
-                    <span>2</span>
-                    <QuantityButton>+</QuantityButton>
-                </QuantityContainer>
-
-                <DeleteButton>
-                    <IonIcon icon={trashOutline} />
-                </DeleteButton>
-            </ProductContainer>
-
-        </HomeContainer >
-    )
-}
+const CartItem = ({ item }) => {
+  return (
+    <HomeContainer>
+      <ProductContainer>
+        <ProductImage src="https://imgs.extra.com.br/55014765/1xg.jpg" alt="foto" />
+        <ProductInfo>
+          <ProductName>Samsung galaxy s20</ProductName>
+          <PriceContainer>
+            <Price>$200</Price>
+          </PriceContainer>
+        </ProductInfo>
+        <QuantityContainer>
+          <QuantityButton>-</QuantityButton>
+          <span>2</span>
+          <QuantityButton>+</QuantityButton>
+        </QuantityContainer>
+        <DeleteButton>
+          <IonIcon icon={trashOutline} />
+        </DeleteButton>
+      </ProductContainer>
+    </HomeContainer>
+  );
+};
 
 const HomeContainer = styled.div`
   display: flex;
@@ -36,15 +34,12 @@ const HomeContainer = styled.div`
 
 const ProductContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  align-items: center;
   margin: 10px;
-  height: 80px;
   background-color: white;
   border-radius: 4px;
-  align-items: center;
-  position: relative;
   min-width: 200px;
-  flex-shrink: 0; 
+  flex-shrink: 0;
 `;
 
 const ProductImage = styled.img`
@@ -52,37 +47,35 @@ const ProductImage = styled.img`
   height: 70px;
   border-radius: 4px;
   margin-right: 10px;
-  position: absolute;
-
 `;
 
 const ProductInfo = styled.div`
-  max-width: 135px;
-  position: absolute;
-  right: 35%;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column;
+  flex-grow: 1;
 `;
 
 const ProductName = styled.h3`
-  margin: 2.5px;
   font-size: 20px;
   font-weight: bold;
-  text-align: center;
+  margin-bottom: 5px;
 `;
 
-const ProductDescription = styled.p`
-  margin: 5px 0;
-  font-size: 10px;
+const PriceContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+
+const Price = styled.span`
+  font-size: 16px;
   color: #555;
+  margin-right: 5px;
 `;
 
 const QuantityContainer = styled.div`
   display: flex;
   align-items: center;
-  position: absolute;
-  right:10%;
 `;
 
 const QuantityButton = styled.button`
@@ -97,11 +90,6 @@ const QuantityButton = styled.button`
   margin: 0 5px;
 `;
 
-const Price = styled.span`
-  font-size: 20px;
-  font-weight: bold;
-`;
-
 const DeleteButton = styled.button`
   background-color: transparent;
   width: 10%;
@@ -109,8 +97,6 @@ const DeleteButton = styled.button`
   color: #cc0000;
   cursor: pointer;
   font-size: 20px;
-  position: absolute;
-  right: 3%;
-  
 `;
+
 export default CartItem;
