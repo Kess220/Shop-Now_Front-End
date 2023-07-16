@@ -198,7 +198,7 @@ const OptionsContainer = styled.div`
   left: ${(props) => (props.show ? "0" : "-100%")};
   height: 100vh;
   width: 60px;
-  background-color: rgba(122, 107, 188, 0.9);
+  background-color: #432682;
   border-radius: 0 4px 4px 0;
   padding: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
