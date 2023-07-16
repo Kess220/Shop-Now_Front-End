@@ -9,9 +9,6 @@ import Logo from "/store.png";
 import ProductCard from "../components/ProductCard";
 
 export default function HomePage() {
-  const [userName, setUserName] = useState("");
-  const [transactions, setTransactions] = useState([]);
-  const [balance, setBalance] = useState(0);
   const [showOptions, setShowOptions] = useState(false);
 
   const handleLogoClick = () => {
@@ -72,70 +69,32 @@ export default function HomePage() {
       navigate("/");
     }
   }, [navigate]);
-
-  useEffect(() => {
-    const fetchUserName = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/nome`,
-          {
-            headers: { Authorization: localStorage.getItem("token") },
-          }
-        );
-        const { nome } = response.data;
-        setUserName(nome);
-      } catch (error) {
-        console.error("Erro ao obter o nome do usuário:", error);
-      }
-    };
-
-    fetchUserName();
-  }, []);
-
-  useEffect(() => {
-    const fetchTransactions = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/transacoes`,
-          {
-            headers: { Authorization: localStorage.getItem("token") },
-          }
-        );
-        const transactionsData = response.data || [];
-        setTransactions(transactionsData);
-
-        let saldo = 0;
-        transactionsData.forEach((transaction) => {
-          if (transaction.tipo === "entrada") {
-            saldo += parseFloat(
-              transaction.valor.replace(/\./g, "").replace(",", ".")
-            );
-          } else if (transaction.tipo === "saida") {
-            saldo -= parseFloat(
-              transaction.valor.replace(/\./g, "").replace(",", ".")
-            );
-          }
-        });
-
-        const saldoFormatado = saldo.toLocaleString("pt-BR", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        });
-
-        setBalance(saldoFormatado);
-      } catch (error) {
-        console.error("Erro ao obter as transações:", error);
-      }
-    };
-
-    fetchTransactions();
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/");
+  
+  const handleCartClick = () => {
+    navigate("/carrinho");
   };
 
+  const handleLogout = async () => {
+    try {
+      const config = {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      };
+  
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}logout`,
+        { token: localStorage.getItem("token") },
+        config
+      );
+  
+      localStorage.removeItem("token");
+      navigate("/");
+    } catch (error) {
+      console.error("Erro ao fazer logout:", error);
+    }
+  };
+  
   return (
     <HomeContainer>
       <Header>
@@ -152,7 +111,7 @@ export default function HomePage() {
       </ProductContainer>
 
       <OptionsContainer show={showOptions}>
-        <OptionItem>
+        <OptionItem onClick={handleCartClick}>
           <OptionIcon>
             <RiShoppingCartLine />
           </OptionIcon>
@@ -164,7 +123,7 @@ export default function HomePage() {
           </OptionIcon>
           Perfil
         </OptionItem>
-        <OptionItem>
+        <OptionItem onClick={handleLogout}>
           <OptionIcon>
             <BiExit />
           </OptionIcon>
@@ -226,6 +185,7 @@ const OptionItem = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 4px;
+  cursor: pointer;
 `;
 
 const OptionIcon = styled.span`
