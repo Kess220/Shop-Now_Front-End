@@ -15,7 +15,6 @@ export default function App() {
           <Route path="/cadastro" element={<SignUpPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/carrinho" element={<CartPage />} />
-          <Route path="/nova-transacao/:tipo" element={<TransactionsPage />} />
         </Routes>
       </BrowserRouter>
     </PagesContainer>
