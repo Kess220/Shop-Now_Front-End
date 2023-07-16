@@ -1,31 +1,31 @@
-import React from 'react';
-import styled from 'styled-components';
-import CartItem from '../components/CartItem';
-import Logo from '/store.png';
+import React from "react";
+import styled from "styled-components";
+import CartItem from "../components/CartItem";
+import Logo from "/store.png";
 
-export default function CartPage (){
-    return (
-        <PageContainer>
-            <Header>
-                <h1>Shop Now</h1>
-                <LogoImage src={Logo} alt="Logo" />
-            </Header>
-            <CartItenContainer>
-                <CartItem />
-                <CartItem />
-                <CartItem />
-                <CartItem />
-                <CartItem />
-                <CartItem />
-            </CartItenContainer>
-            <CartSummary>
-                <CleanCartButton>Esvaziar carrinho</CleanCartButton>
-                <TotalPrice>Total: $500</TotalPrice>
-                <CheckoutButton>Finalizar Compra</CheckoutButton>
-            </CartSummary>
-        </PageContainer>
-    );
-};
+export default function CartPage() {
+  return (
+    <PageContainer>
+      <Header>
+        <h1>Shop Now</h1>
+        <LogoImage src={Logo} alt="Logo" />
+      </Header>
+      <CartItenContainer>
+        <CartItem />
+        <CartItem />
+        <CartItem />
+        <CartItem />
+        <CartItem />
+        <CartItem />
+      </CartItenContainer>
+      <CartSummary>
+        <CleanCartButton>Esvaziar carrinho</CleanCartButton>
+        <TotalPrice>Total: $500</TotalPrice>
+        <CheckoutButton>Finalizar Compra</CheckoutButton>
+      </CartSummary>
+    </PageContainer>
+  );
+}
 
 const PageContainer = styled.div`
   display: flex;
@@ -84,7 +84,7 @@ const TotalPrice = styled.span`
 
 const CheckoutButton = styled.button`
   background-color: #614e93;
-  border-radius: 0 0 4px 4px ;
+  border-radius: 0 0 4px 4px;
   margin-top: 15px;
   color: white;
   padding: 10px 20px;
