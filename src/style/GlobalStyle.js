@@ -32,8 +32,7 @@ const GlobalStyle = createGlobalStyle`
         padding: 15px;
         margin: 1px;
         :focus {
-            border: 2px solid #ffb6b6;
-            margin: 0px;
+            border-color: #fca311;
         }
     }
     form {
