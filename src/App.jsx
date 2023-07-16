@@ -4,7 +4,6 @@ import HomePage from "./pages/HomePage";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
 import CartPage from "./pages/CartPage";
-import TransactionsPage from "./pages/TransactionPage";
 
 export default function App() {
   return (
