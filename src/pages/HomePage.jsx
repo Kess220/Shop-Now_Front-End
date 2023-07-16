@@ -69,6 +69,10 @@ export default function HomePage() {
       navigate("/");
     }
   }, [navigate]);
+  
+  const handleCartClick = () => {
+    navigate("/carrinho");
+  };
 
   const handleLogout = async () => {
     try {
@@ -107,7 +111,7 @@ export default function HomePage() {
       </ProductContainer>
 
       <OptionsContainer show={showOptions}>
-        <OptionItem>
+        <OptionItem onClick={handleCartClick}>
           <OptionIcon>
             <RiShoppingCartLine />
           </OptionIcon>
