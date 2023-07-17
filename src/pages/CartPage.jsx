@@ -1,192 +1,174 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { BiExit } from "react-icons/bi";
+import { RiShoppingCartLine } from "react-icons/ri";
+import { BsInfoCircle } from "react-icons/bs";
+
+import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import Logo from "/store.png";
-import CartItem from "../components/CartItem";
-import PurchaseSuccessAnimation from "../components/PurchaseSuccessAnimation";
+import CartItem from "../components/CartItem"; // Componente para exibir os itens do carrinho
+import { useTransition, animated } from "react-spring";
 
 export default function CartPage() {
-  const [cartItems, setCartItems] = useState([]);
-  const [showConfirmation, setShowConfirmation] = useState(false);
-  const userId = localStorage.getItem("userId");
-  const userEmail = localStorage.getItem("userEmail");
+  const [userName, setUserName] = useState("");
+  const [showOptions, setShowOptions] = useState(false);
+  const [logoClicked, setLogoClicked] = useState(false);
+  const [cartItems, setCartItems] = useState([]); // Itens do carrinho
+  const [userImage, setUserImage] = useState("");
+  const userId = localStorage.getItem("userId") || "";
 
-  const quantity = cartItems.length;
-  const [isCheckoutComplete, setIsCheckoutComplete] = useState(false);
+  const handleLogoClick = () => {
+    setShowOptions(!showOptions);
+    setLogoClicked(!logoClicked);
+  };
 
-  const userName = localStorage.getItem("userName");
+  const handleOutsideClick = () => {
+    if (showOptions) {
+      setShowOptions(false);
+      setLogoClicked(false);
+    }
+  };
+
+  const navigate = useNavigate();
+
   useEffect(() => {
-    fetchData();
-  }, []);
-
-  const SendEmail = async (userEmail, userName, city, zip, quantity, item) => {
-    // Acesso aos dados dos produtos
-    const purchaseData = JSON.parse(localStorage.getItem("purchaseData"));
-    const purchasedItems = purchaseData.purchasedItems;
-
-    try {
-      await axios.post(`${import.meta.env.VITE_API_URL}send-email`, {
-        cliente: userName,
-        produtos: purchasedItems.map((item) => ({
-          modelo: item.modelo,
-          preco: item.preco,
-          quantidade: item.quantidade,
-        })),
-        total: purchaseData.totalPrice,
-        destinatario: userEmail,
-      });
-      console.log("E-mail enviado com sucesso para", userEmail, userName);
-      console.log(item.modelo, item.preco, item.quantidade, purchaseData.total);
-    } catch (error) {
-      console.error("Erro ao enviar o e-mail:", error);
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/");
     }
-  };
+  }, [navigate]);
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}itens/${userId}`
-      );
-      setCartItems(response.data);
-    } catch (error) {
-      console.error("Error fetching cart data:", error);
-    }
-  };
-
-  const clearCart = async () => {
-    try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}itens/${userId}`);
-      console.log("Carrinho esvaziado com sucesso!");
-      setCartItems([]);
-      updateTotalPrice();
-    } catch (err) {
-      console.error("Erro ao esvaziar o carrinho:", err);
-    }
-  };
-
-  const handleRemoveItem = (itemId) => {
-    const updatedItems = cartItems.filter((item) => item.id_item !== itemId);
-    setCartItems(updatedItems);
-    updateTotalPrice();
-  };
-
-  const getTotalPrice = () => {
-    const total = cartItems.reduce(
-      (total, item) => total + item.preco * item.quantidade,
-      0
-    );
-    return total.toLocaleString("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    });
-  };
-
-  const updateTotalPrice = () => {
-    const totalPrice = cartItems.reduce(
-      (total, item) => total + item.preco * item.quantidade,
-      0
-    );
-    setTotalPrice(totalPrice);
-  };
-
-  const handleCheckout = () => {
-    setShowConfirmation(true);
-  };
-
-  const handleConfirmCheckout = () => {
-    // Lógica para confirmar a compra
-    console.log("Compra confirmada!");
-
-    // Salvar dados dos produtos e preço total no localStorage
-    const purchasedItems = [...cartItems];
-    const totalPrice = cartItems.reduce(
-      (total, item) => total + item.preco * item.quantidade,
-      0
-    );
-    const selectedProduct = purchasedItems[0]; // Aqui estou considerando apenas o primeiro item do carrinho
-
-    const purchaseData = {
-      purchasedItems,
-      totalPrice,
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}profile/${userId}`,
+          {
+            headers: { Authorization: localStorage.getItem("token") },
+          }
+        );
+        const { image } = response.data;
+        setUserImage(image);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
     };
 
-    localStorage.setItem("purchaseData", JSON.stringify(purchaseData));
-    console.log("Dados da compra salvos no localStorage:", purchaseData);
-    
-    // Restaurar o estado inicial e redirecionar para a página de sucesso
-    setCartItems([]);
-    setTotalPrice(0);
-    setShowConfirmation(false);
-    setIsCheckoutComplete(true);
-    SendEmail(userEmail, userName, null, null, quantity, selectedProduct)
-    clearCart();
+    fetchUserData();
+  }, [userId]);
+
+  useEffect(() => {
+    const fetchCartItems = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}cart`,
+          {
+            headers: { Authorization: localStorage.getItem("token") },
+          }
+        );
+        const cartItemsData = response.data || [];
+        setCartItems(cartItemsData);
+        console.log(cartItemsData);
+      } catch (error) {
+        console.error("Error fetching cart items:", error);
+      }
+    };
+
+    fetchCartItems();
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
   };
 
-  const handleCancelCheckout = () => {
-    setShowConfirmation(false);
+  const handleRemoveFromCart = (itemId) => {
+    // Lógica para remover item do carrinho
+    console.log("Item removido do carrinho:", itemId);
   };
-
-  const [totalPrice, setTotalPrice] = useState(0);
 
   return (
-    <PageContainer>
+    <CartContainer>
       <Header>
-        <h1>Shop Now</h1>
-        <LogoImage src={Logo} alt="Logo" />
+        <h1 data-test="user-name">Shop Now</h1>
+        <LogoContainer onClick={handleLogoClick} logoClicked={logoClicked}>
+          <LogoImage src={Logo} alt="Logo" />
+        </LogoContainer>
       </Header>
-      <CartItenContainer>
+
+      <CartItemsContainer>
         {cartItems.map((item) => (
           <CartItem
-            key={item._id}
+            key={item.id}
             item={item}
-            onRemove={() => handleRemoveItem(item.id_item)}
-            onUpdateTotal={updateTotalPrice}
+            onRemoveFromCart={handleRemoveFromCart}
           />
         ))}
-      </CartItenContainer>
-      {!isCheckoutComplete && (
-        <CartSummary>
-          <CleanCartButton onClick={clearCart}>
-            Esvaziar carrinho
-          </CleanCartButton>
-          <TotalPrice>Total: {getTotalPrice()}</TotalPrice>
-          <CheckoutButton onClick={handleCheckout}>
-            Finalizar Compra
-          </CheckoutButton>
-        </CartSummary>
-      )}
-      {showConfirmation && (
-        <ConfirmationOverlay>
-          <ConfirmationDialog>
-            <ConfirmationMessage>
-              Deseja confirmar a compra?
-            </ConfirmationMessage>
-            <ConfirmationButtons>
-              <ConfirmationButton onClick={handleConfirmCheckout}>
-                Confirmar
-              </ConfirmationButton>
-              <ConfirmationButton onClick={handleCancelCheckout}>
-                Cancelar
-              </ConfirmationButton>
-            </ConfirmationButtons>
-          </ConfirmationDialog>
-        </ConfirmationOverlay>
-      )}
-      {isCheckoutComplete && (
-        <PurchaseSuccessContainer>
-          <PurchaseSuccessAnimation />
-        </PurchaseSuccessContainer>
-      )}
-    </PageContainer>
+      </CartItemsContainer>
+
+      {showOptions && <Overlay onClick={handleOutsideClick} />}
+
+      <OptionsContainer show={showOptions}>
+        <ProfileContainer style={{ marginBottom: "16px" }}>
+          <ProfileImageContainer>
+            <Link to="/home">
+              <ProfileImage src={userImage} alt="Profile" />
+            </Link>
+          </ProfileImageContainer>
+        </ProfileContainer>
+        <OptionIconContainer>
+          <Link to="/cart">
+            <OptionIcon>
+              <RiShoppingCartLine />
+            </OptionIcon>
+          </Link>
+        </OptionIconContainer>
+
+        <OptionIconContainer onClick={handleLogout}>
+          <OptionIcon>
+            <BiExit />
+          </OptionIcon>
+        </OptionIconContainer>
+        <OptionIconContainer>
+          <OptionIcon>
+            <BsInfoCircle />
+          </OptionIcon>
+        </OptionIconContainer>
+      </OptionsContainer>
+    </CartContainer>
   );
 }
 
-const PageContainer = styled.div`
+const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 2;
+`;
+
+const CartContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: calc(100vh - 50px);
-  justify-content: space-between;
   overflow: auto;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.795);
+    opacity: ${(props) => (props.showOptions ? 1 : 0)};
+    pointer-events: ${(props) => (props.showOptions ? "auto" : "none")};
+    transition: opacity 0.3s ease;
+  }
 `;
 
 const Header = styled.header`
@@ -199,96 +181,79 @@ const Header = styled.header`
   color: white;
 `;
 
+const CartItemsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  margin-top: 20px;
+`;
+
+const LogoContainer = styled.div`
+  cursor: pointer;
+  transform: ${(props) => (props.logoClicked ? "scale(1.1)" : "none")};
+  transition: transform 0.3s ease;
+
+  &:active {
+    transform: scale(1.2);
+  }
+`;
+
 const LogoImage = styled.img`
   width: 80px;
   height: 80px;
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 
-const CartItenContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  overflow: auto;
-  border-radius: 4px;
-`;
-
-const CleanCartButton = styled.button`
-  color: #cc0000;
-  background-color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  font-size: 12px;
-  cursor: pointer;
-`;
-
-const CartSummary = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin: calc(10px + 5px) 10px 10px;
-  background-color: white;
-  border-radius: 10px;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const TotalPrice = styled.span`
-  font-size: 18px;
-  font-weight: bold;
-`;
-
-const CheckoutButton = styled.button`
-  background-color: #614e93;
-  border-radius: 0 0 4px 4px;
-  margin-top: 15px;
-  color: white;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-`;
-
-const ConfirmationOverlay = styled.div`
+const OptionsContainer = styled.div`
   position: fixed;
   top: 0;
-  left: 0;
+  left: ${(props) => (props.show ? "0" : "-100%")};
+  height: 100vh;
+  width: 60px;
+  background-color: #432682;
+  border-radius: 0 4px 4px 0;
+  padding: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: left 0.3s ease, background-color 0.3s ease;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const OptionIconContainer = styled.div`
+  margin-bottom: 26px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+`;
+
+const OptionIcon = styled.span`
+  color: white;
+  font-size: 24px;
+`;
+
+const ProfileContainer = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 20px;
+`;
+
+const ProfileImageContainer = styled.div`
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  border-radius: 50%;
+`;
+
+const ProfileImage = styled.img`
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-`;
-
-const ConfirmationDialog = styled.div`
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 4px;
-  text-align: center;
-`;
-
-const ConfirmationMessage = styled.p`
-  font-size: 18px;
-  margin-bottom: 20px;
-`;
-
-const ConfirmationButtons = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
-const ConfirmationButton = styled.button`
-  background-color: #614e93;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  margin: 0 10px;
-  font-size: 16px;
-  cursor: pointer;
-`;
-
-const PurchaseSuccessContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
+  object-fit: cover;
 `;
