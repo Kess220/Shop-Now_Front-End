@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import gifAnimation from '../assets/W0zfpCnqF0.gif';
 import { useLocation } from 'react-router-dom';
+import { IonIcon } from "@ionic/react";
+import { trashOutline } from "ionicons/icons";
+
+
 
 const Container = styled.div`
   display: flex;
@@ -44,6 +48,7 @@ const Checkout = () => {
   const [zip, setZip] = useState('');
   const location = useLocation();
   const selectedProduct = location.state?.product;
+  console.log(selectedProduct);
 
   const handleCheckout = () => {
     if (validateInputs()) {
@@ -101,6 +106,7 @@ const Checkout = () => {
           <Title>Checkout</Title>
           {selectedProduct && (
             <>
+             <HomeContainer>
               <ProductContainer>
                 <ProductImage src={selectedProduct.imgs[0]} alt="foto" />
                 <ProductInfo>
@@ -109,7 +115,16 @@ const Checkout = () => {
                     <Price>${selectedProduct.preco}</Price>
                   </PriceContainer>
                 </ProductInfo>
+                <QuantityContainer>
+                  <QuantityButton>-</QuantityButton>
+                  <span>{selectedProduct.quantidade}</span>
+                  <QuantityButton>+</QuantityButton>
+                </QuantityContainer>
+                <DeleteButton>
+                  <IonIcon icon={trashOutline} />
+                </DeleteButton>
               </ProductContainer>
+            </HomeContainer>
             </>
           )}
           <Input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />
@@ -122,6 +137,13 @@ const Checkout = () => {
     </Container>
   );
 };
+
+
+
+const HomeContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 const ProductContainer = styled.div`
   display: flex;
@@ -162,5 +184,32 @@ const Price = styled.span`
   color: #555;
   margin-right: 5px;
 `;
+
+const QuantityContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const QuantityButton = styled.button`
+  width: 24px;
+  height: 24px;
+  background-color: #ccc;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  margin: 0 5px;
+`;
+
+const DeleteButton = styled.button`
+  background-color: transparent;
+  width: 10%;
+  border: none;
+  color: #cc0000;
+  cursor: pointer;
+  font-size: 20px;
+`;
+
 
 export default Checkout;
