@@ -3,7 +3,38 @@ import styled from 'styled-components';
 import gifAnimation from '../assets/W0zfpCnqF0.gif';
 import { useLocation } from 'react-router-dom';
 
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+`;
 
+const Title = styled.h1`
+  font-size: 24px;
+  margin-bottom: 16px;
+`;
+
+const Input = styled.input`
+  width: 300px;
+  height: 40px;
+  padding: 8px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+`;
+
+const Button = styled.button`
+  width: 300px;
+  height: 40px;
+  padding: 8px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+`;
 
 const Checkout = () => {
   const [isCheckoutComplete, setIsCheckoutComplete] = useState(false);
@@ -15,13 +46,20 @@ const Checkout = () => {
   const selectedProduct = location.state?.product;
 
   const handleCheckout = () => {
-    setIsCheckoutComplete(true);
-    sendEmail(name, address, city, zip);
+    if (validateInputs()) {
+      setIsCheckoutComplete(true);
+      sendEmail(name, address, city, zip);
+    } else {
+      alert('Por favor, preencha todos os campos obrigatórios.');
+    }
   };
 
   const sendEmail = (name, address, city, zip) => {
-    // Aqui você pode implementar a lógica para enviar o email com os dados do checkout
     console.log('Enviando email:', name, address, city, zip);
+  };
+
+  const validateInputs = () => {
+    return name !== '' && address !== '' && city !== '' && zip !== '';
   };
 
   const CompletedContainer = styled.div`
@@ -56,7 +94,7 @@ const Checkout = () => {
         <CompletedContainer>
           <CompletedImage src={gifAnimation} alt="Animation" />
           <CompletedTitle>Compra Realizada</CompletedTitle>
-          <CompletedSubtitle>Confirme no seu email Span</CompletedSubtitle>
+          <CompletedSubtitle>Confirme no seu Email</CompletedSubtitle>
         </CompletedContainer>
       ) : (
         <>
@@ -74,10 +112,10 @@ const Checkout = () => {
               </ProductContainer>
             </>
           )}
-          <Input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
-          <Input type="text" placeholder="Address" value={address} onChange={(e) => setAddress(e.target.value)} />
-          <Input type="text" placeholder="City" value={city} onChange={(e) => setCity(e.target.value)} />
-          <Input type="text" placeholder="Zip" value={zip} onChange={(e) => setZip(e.target.value)} />
+          <Input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />
+          <Input type="text" placeholder="Address" value={address} onChange={(e) => setAddress(e.target.value)} required />
+          <Input type="text" placeholder="City" value={city} onChange={(e) => setCity(e.target.value)} required />
+          <Input type="text" placeholder="Zip" value={zip} onChange={(e) => setZip(e.target.value)} required />
           <Button onClick={handleCheckout}>Checkout</Button>
         </>
       )}
@@ -123,39 +161,6 @@ const Price = styled.span`
   font-size: 16px;
   color: #555;
   margin-right: 5px;
-`;
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-`;
-
-const Title = styled.h1`
-  font-size: 24px;
-  margin-bottom: 16px;
-`;
-
-const Input = styled.input`
-  width: 300px;
-  height: 40px;
-  padding: 8px;
-  margin-bottom: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  outline: none;
-`;
-
-const Button = styled.button`
-  width: 300px;
-  height: 40px;
-  padding: 8px;
-  margin-bottom: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  outline: none;
 `;
 
 export default Checkout;
