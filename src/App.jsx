@@ -13,7 +13,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<SignInPage />} />
-          <Route path="/cadastro" element={<SignUpPage />} />
+          <Route path="/register" element={<SignUpPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/carrinho" element={<CartPage />} />
           <Route path="/profile" element={<ProfilePage />} />
