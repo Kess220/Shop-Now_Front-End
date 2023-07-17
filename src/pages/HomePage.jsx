@@ -102,7 +102,9 @@ export default function HomePage() {
       <OptionsContainer show={showOptions}>
         <ProfileContainer style={{ marginBottom: "16px" }}>
           <ProfileImageContainer>
-            <ProfileImage src={profileImageUrl} alt="Profile" />
+            <Link to="/perfil">
+              <ProfileImage src={profileImageUrl} alt="Profile" />
+            </Link>
           </ProfileImageContainer>
         </ProfileContainer>
         <OptionIconContainer>
@@ -227,6 +229,7 @@ const OptionIcon = styled.span`
 const ProfileContainer = styled.div`
   display: flex;
   align-items: center;
+  padding: 20px;
 `;
 
 const ProfileImageContainer = styled.div`

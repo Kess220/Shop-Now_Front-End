@@ -22,10 +22,12 @@ export default function SignInPage() {
         }
       );
 
-      const { token } = response.data;
+      const { token, userId } = response.data;
 
-      // Armazenar o token no localStorage
+      // Armazenar o token e o userId no localStorage
       localStorage.setItem("token", token);
+      localStorage.setItem("userId", userId);
+
       // Redirecionar o usuário para a rota "/home"
       navigate("/home");
       console.log("Login feito com sucesso!");
