@@ -29,13 +29,13 @@ const Input = styled.input`
 `;
 
 const Button = styled.button`
-  width: 300px;
-  height: 40px;
-  padding: 8px;
-  margin-bottom: 16px;
-  border: 1px solid #ccc;
+  background-color: #614e93;
+  color: white;
+  padding: 10px 20px;
+  border: none;
   border-radius: 4px;
-  outline: none;
+  font-size: 16px;
+  cursor: pointer;
 `;
 
 const Checkout = () => {
@@ -126,11 +126,11 @@ const Checkout = () => {
                   </ProductInfo>
                   <QuantityContainer>
                     <QuantityButton onClick={handleDecreaseQuantity}>
-                      <IonIcon icon={removeOutline} />
+                      -
                     </QuantityButton>
                     <span>{quantity}</span>
                     <QuantityButton onClick={handleIncreaseQuantity}>
-                      <IonIcon icon={addOutline} />
+                     +
                     </QuantityButton>
                   </QuantityContainer>
                 </ProductContainer>
