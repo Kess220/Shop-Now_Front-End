@@ -1,22 +1,24 @@
 import React from "react";
 import styled from "styled-components";
-import { trashOutline } from 'ionicons/icons';
-import { IonIcon } from '@ionic/react';
+import { trashOutline } from "ionicons/icons";
+import { IonIcon } from "@ionic/react";
 
 const CartItem = ({ item }) => {
+  console.log("item:", item);
+
   return (
     <HomeContainer>
       <ProductContainer>
-        <ProductImage src="https://imgs.extra.com.br/55014765/1xg.jpg" alt="foto" />
+        <ProductImage src={item.imgs} alt="foto" />
         <ProductInfo>
-          <ProductName>Samsung galaxy s20</ProductName>
+          <ProductName>{item.modelo}</ProductName>
           <PriceContainer>
-            <Price>$200</Price>
+            <Price>${item.preco}</Price>
           </PriceContainer>
         </ProductInfo>
         <QuantityContainer>
           <QuantityButton>-</QuantityButton>
-          <span>2</span>
+          <span>{item.quantidade}</span>
           <QuantityButton>+</QuantityButton>
         </QuantityContainer>
         <DeleteButton>
@@ -65,7 +67,6 @@ const PriceContainer = styled.div`
   display: flex;
   align-items: center;
 `;
-
 
 const Price = styled.span`
   font-size: 16px;
