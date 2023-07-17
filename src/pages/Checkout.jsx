@@ -15,7 +15,7 @@ const SendEmail = async (userEmail, userName, city, zip, quantity, selectedProdu
       total: selectedProduct?.preco * quantity,
       destinatario: userEmail,
     });
-    console.log('E-mail enviado com sucesso');
+    console.log('E-mail enviado com sucesso para',userEmail,userName);
   } catch (error) {
     console.error('Erro ao enviar o e-mail:', error);
   }
