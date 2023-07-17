@@ -83,7 +83,6 @@ export default function HomePage() {
     navigate("/");
   };
   const handleAddToCart = () => {
-    // Lógica para adicionar produto ao carrinho
     console.log("Produto adicionado ao carrinho!");
   };
 

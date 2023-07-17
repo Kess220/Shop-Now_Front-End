@@ -103,10 +103,8 @@ const ProductCard = ({ product, onAddToCart }) => {
                 <ProductName>{product.modelo}</ProductName>
                 <ProductPrice>R$ {product.preco}</ProductPrice>
                 <ActionButtons>
-                  <AddToCartButton>Adicionar ao Carrinho</AddToCartButton>
-                  <BuyNowButton onClick={handleBuyNow}>
-                    Comprar Agora
-                  </BuyNowButton>
+                  <AddToCartButton onClick={handleAddToCart} >Adicionar ao Carrinho</AddToCartButton>
+                  <BuyNowButton onClick={handleBuyNow}>Comprar Agora</BuyNowButton>
                 </ActionButtons>
               </ModalDetails>
             </ModalContent>
