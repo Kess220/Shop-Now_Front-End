@@ -9,29 +9,36 @@ export default function CartPage() {
   const [cartItems, setCartItems] = useState([]);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const userId = localStorage.getItem("userId");
+  const userEmail = localStorage.getItem("userEmail");
+
+  const quantity = cartItems.length;
   const [isCheckoutComplete, setIsCheckoutComplete] = useState(false);
 
+  const userName = localStorage.getItem("userName");
   useEffect(() => {
     fetchData();
   }, []);
 
   const SendEmail = async (userEmail, userName, quantity, selectedProduct) => {
+    // Acesso aos dados dos produtos
+    const purchaseData = JSON.parse(localStorage.getItem("purchaseData"));
+    const purchasedItems = purchaseData.purchasedItems;
+
     try {
-      await axios.post(
-        `${import.meta.env.VITE_API_URL}send-email`,{
+      await axios.post(`${import.meta.env.VITE_API_URL}send-email`, {
         cliente: userName,
-        produto: selectedProduct?.modelo,
-        preco: selectedProduct?.preco,
-        quantidade: quantity,
-        total: (selectedProduct?.preco * quantity).toLocaleString('pt-BR', {
-          style: 'currency',
-          currency: 'BRL',
-        }),
+        produtos: purchasedItems.map((item) => ({
+          modelo: item.modelo,
+          preco: item.preco,
+          quantidade: item.quantidade,
+        })),
+        total: purchaseData.totalPrice,
         destinatario: userEmail,
       });
-      console.log('E-mail enviado com sucesso para',userEmail,userName);
+      console.log("E-mail enviado com sucesso para", userEmail, userName);
+      console.log(item.modelo, item.preco, item.quantidade, purchaseData.total);
     } catch (error) {
-      console.error('Erro ao enviar o e-mail:', error);
+      console.error("Erro ao enviar o e-mail:", error);
     }
   };
 
@@ -96,6 +103,7 @@ export default function CartPage() {
       (total, item) => total + item.preco * item.quantidade,
       0
     );
+    const selectedProduct = purchasedItems[0]; // Aqui estou considerando apenas o primeiro item do carrinho
 
     const purchaseData = {
       purchasedItems,
@@ -110,7 +118,7 @@ export default function CartPage() {
     setTotalPrice(0);
     setShowConfirmation(false);
     setIsCheckoutComplete(true);
-    SendEmail(userEmail, userName, quantity, selectedProduc)
+    SendEmail(userEmail, userName, quantity, selectedProduct);
     clearCart();
   };
 
