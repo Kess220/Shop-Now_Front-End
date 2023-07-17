@@ -3,38 +3,7 @@ import styled from 'styled-components';
 import gifAnimation from '../assets/W0zfpCnqF0.gif';
 import { useLocation } from 'react-router-dom';
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-`;
 
-const Title = styled.h1`
-  font-size: 24px;
-  margin-bottom: 16px;
-`;
-
-const Input = styled.input`
-  width: 300px;
-  height: 40px;
-  padding: 8px;
-  margin-bottom: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  outline: none;
-`;
-
-const Button = styled.button`
-  width: 300px;
-  height: 40px;
-  padding: 8px;
-  margin-bottom: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  outline: none;
-`;
 
 const Checkout = () => {
   const [isCheckoutComplete, setIsCheckoutComplete] = useState(false);
@@ -87,7 +56,7 @@ const Checkout = () => {
         <CompletedContainer>
           <CompletedImage src={gifAnimation} alt="Animation" />
           <CompletedTitle>Compra Realizada</CompletedTitle>
-          <CompletedSubtitle>Confirme no seu email</CompletedSubtitle>
+          <CompletedSubtitle>Confirme no seu email Span</CompletedSubtitle>
         </CompletedContainer>
       ) : (
         <>
@@ -154,6 +123,39 @@ const Price = styled.span`
   font-size: 16px;
   color: #555;
   margin-right: 5px;
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+`;
+
+const Title = styled.h1`
+  font-size: 24px;
+  margin-bottom: 16px;
+`;
+
+const Input = styled.input`
+  width: 300px;
+  height: 40px;
+  padding: 8px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+`;
+
+const Button = styled.button`
+  width: 300px;
+  height: 40px;
+  padding: 8px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
 `;
 
 export default Checkout;
