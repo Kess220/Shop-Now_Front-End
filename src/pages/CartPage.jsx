@@ -13,27 +13,7 @@ export default function CartPage() {
 
   useEffect(() => {
     fetchData();
-  }, []);
-
-  const SendEmail = async (userEmail, userName, quantity, selectedProduct) => {
-    try {
-      await axios.post(
-        `${import.meta.env.VITE_API_URL}send-email`,{
-        cliente: userName,
-        produto: selectedProduct?.modelo,
-        preco: selectedProduct?.preco,
-        quantidade: quantity,
-        total: (selectedProduct?.preco * quantity).toLocaleString('pt-BR', {
-          style: 'currency',
-          currency: 'BRL',
-        }),
-        destinatario: userEmail,
-      });
-      console.log('E-mail enviado com sucesso para',userEmail,userName);
-    } catch (error) {
-      console.error('Erro ao enviar o e-mail:', error);
-    }
-  };
+  }, []);  
 
   const fetchData = async () => {
     try {
@@ -104,13 +84,12 @@ export default function CartPage() {
 
     localStorage.setItem("purchaseData", JSON.stringify(purchaseData));
     console.log("Dados da compra salvos no localStorage:", purchaseData);
-
+    
     // Restaurar o estado inicial e redirecionar para a página de sucesso
     setCartItems([]);
     setTotalPrice(0);
     setShowConfirmation(false);
     setIsCheckoutComplete(true);
-    SendEmail(userEmail, userName, quantity, selectedProduc)
     clearCart();
   };
 
