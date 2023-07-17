@@ -27,7 +27,7 @@ export default function CartPage() {
     try {
       await axios.delete(`${import.meta.env.VITE_API_URL}itens/${userId}`);
       console.log("Carrinho esvaziado com sucesso!");
-      setCartItems([]); // Limpa os itens do carrinho no estado
+      setCartItems([]);
     } catch (err) {
       console.error("Erro ao esvaziar o carrinho:", err);
     }
@@ -43,12 +43,11 @@ export default function CartPage() {
       (total, item) => total + item.preco * item.quantidade,
       0
     );
-    return total.toLocaleString('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
+    return total.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
     });
   };
-  
 
   return (
     <PageContainer>
