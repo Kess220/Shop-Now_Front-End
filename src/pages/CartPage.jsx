@@ -3,10 +3,13 @@ import styled from "styled-components";
 import axios from "axios";
 import Logo from "/store.png";
 import CartItem from "../components/CartItem";
+import PurchaseSuccessAnimation from "../components/PurchaseSuccessAnimation";
 
 export default function CartPage() {
   const [cartItems, setCartItems] = useState([]);
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const userId = localStorage.getItem("userId");
+  const [isCheckoutComplete, setIsCheckoutComplete] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -28,7 +31,7 @@ export default function CartPage() {
       await axios.delete(`${import.meta.env.VITE_API_URL}itens/${userId}`);
       console.log("Carrinho esvaziado com sucesso!");
       setCartItems([]);
-      updateTotalPrice(); // Atualiza o total após esvaziar o carrinho
+      updateTotalPrice();
     } catch (err) {
       console.error("Erro ao esvaziar o carrinho:", err);
     }
@@ -37,7 +40,7 @@ export default function CartPage() {
   const handleRemoveItem = (itemId) => {
     const updatedItems = cartItems.filter((item) => item.id_item !== itemId);
     setCartItems(updatedItems);
-    updateTotalPrice(); // Atualiza o total após remover um item
+    updateTotalPrice();
   };
 
   const getTotalPrice = () => {
@@ -59,6 +62,25 @@ export default function CartPage() {
     setTotalPrice(totalPrice);
   };
 
+  const handleCheckout = () => {
+    setShowConfirmation(true);
+  };
+
+  const handleConfirmCheckout = () => {
+    // Lógica para confirmar a compra
+    console.log("Compra confirmada!");
+    // Restaurar o estado inicial e redirecionar para a página de sucesso
+    setCartItems([]);
+    setTotalPrice(0);
+    setShowConfirmation(false);
+    setIsCheckoutComplete(true);
+    clearCart()
+  };
+
+  const handleCancelCheckout = () => {
+    setShowConfirmation(false);
+  };
+
   const [totalPrice, setTotalPrice] = useState(0);
 
   return (
@@ -73,16 +95,43 @@ export default function CartPage() {
             key={item._id}
             item={item}
             onRemove={() => handleRemoveItem(item.id_item)}
-            onUpdateTotal={updateTotalPrice} // Passa a função para atualizar o total
+            onUpdateTotal={updateTotalPrice}
           />
         ))}
       </CartItenContainer>
-
-      <CartSummary>
-        <CleanCartButton onClick={clearCart}>Esvaziar carrinho</CleanCartButton>
-        <TotalPrice>Total: {getTotalPrice()}</TotalPrice>
-        <CheckoutButton>Finalizar Compra</CheckoutButton>
-      </CartSummary>
+      {!isCheckoutComplete && (
+        <CartSummary>
+          <CleanCartButton onClick={clearCart}>
+            Esvaziar carrinho
+          </CleanCartButton>
+          <TotalPrice>Total: {getTotalPrice()}</TotalPrice>
+          <CheckoutButton onClick={handleCheckout}>
+            Finalizar Compra
+          </CheckoutButton>
+        </CartSummary>
+      )}
+      {showConfirmation && (
+        <ConfirmationOverlay>
+          <ConfirmationDialog>
+            <ConfirmationMessage>
+              Deseja confirmar a compra?
+            </ConfirmationMessage>
+            <ConfirmationButtons>
+              <ConfirmationButton onClick={handleConfirmCheckout}>
+                Confirmar
+              </ConfirmationButton>
+              <ConfirmationButton onClick={handleCancelCheckout}>
+                Cancelar
+              </ConfirmationButton>
+            </ConfirmationButtons>
+          </ConfirmationDialog>
+        </ConfirmationOverlay>
+      )}
+      {isCheckoutComplete && (
+        <PurchaseSuccessContainer>
+          <PurchaseSuccessAnimation />
+        </PurchaseSuccessContainer>
+      )}
     </PageContainer>
   );
 }
@@ -150,4 +199,51 @@ const CheckoutButton = styled.button`
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
+`;
+
+const ConfirmationOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+`;
+
+const ConfirmationDialog = styled.div`
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 4px;
+  text-align: center;
+`;
+
+const ConfirmationMessage = styled.p`
+  font-size: 18px;
+  margin-bottom: 20px;
+`;
+
+const ConfirmationButtons = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const ConfirmationButton = styled.button`
+  background-color: #614e93;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  margin: 0 10px;
+  font-size: 16px;
+  cursor: pointer;
+`;
+
+const PurchaseSuccessContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 `;

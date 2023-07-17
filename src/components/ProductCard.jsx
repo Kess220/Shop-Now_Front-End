@@ -37,9 +37,16 @@ const ProductCard = ({ product, onAddToCart }) => {
     );
   };
 
-  const handleBuyNow = () => {
+  const handleBuyNow = async () => {
     setSelectedProduct(product);
     navigate("/checkout", { state: { product } });
+
+    try {
+      await axios.delete(`${import.meta.env.VITE_API_URL}itens/${userId}`);
+      console.log("Carrinho esvaziado com sucesso!");
+    } catch (error) {
+      console.error("Erro ao esvaziar o carrinho:", error);
+    }
   };
 
   const handleAddToCart = async () => {
