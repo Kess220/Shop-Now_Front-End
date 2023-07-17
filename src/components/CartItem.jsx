@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { trashOutline } from "ionicons/icons";
 import { IonIcon } from "@ionic/react";
@@ -10,14 +10,20 @@ const CartItem = ({ item, onIncrease, onDecrease, onRemove }) => {
 
   const fetchData = async () => {
     try {
+      const userId = localStorage.getItem("userId");
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}itens/${userId}	`
+        `${import.meta.env.VITE_API_URL}itens/${userId}`
       );
       setCartItems(response.data);
     } catch (error) {
       console.error("Error fetching cart data:", error);
     }
   };
+
+  useEffect(() => {
+    setCartItems([item]);
+  }, [item]);
+
   const handleIncrease = async () => {
     try {
       const userId = localStorage.getItem("userId");
@@ -27,24 +33,28 @@ const CartItem = ({ item, onIncrease, onDecrease, onRemove }) => {
         }/aumentar-quantidade`,
         { userId }
       );
-      onIncrease(item.id_item);
+
+      fetchData(); // Fetch updated data after increase
     } catch (error) {
       console.error("Erro ao aumentar a quantidade:", error);
     }
   };
 
   const handleDecrease = async () => {
-    try {
-      const userId = localStorage.getItem("userId");
-      await axios.put(
-        `${import.meta.env.VITE_API_URL}itens/${
-          item.id_item
-        }/diminuir-quantidade`,
-        { userId }
-      );
-      onDecrease(item.id_item);
-    } catch (error) {
-      console.error("Erro ao diminuir a quantidade:", error);
+    if (item.quantidade > 1) {
+      try {
+        const userId = localStorage.getItem("userId");
+        await axios.put(
+          `${import.meta.env.VITE_API_URL}itens/${
+            item.id_item
+          }/diminuir-quantidade`,
+          { userId }
+        );
+
+        fetchData(); // Fetch updated data after decrease
+      } catch (error) {
+        console.error("Erro ao diminuir a quantidade:", error);
+      }
     }
   };
 
@@ -55,8 +65,8 @@ const CartItem = ({ item, onIncrease, onDecrease, onRemove }) => {
       await axios.delete(`${import.meta.env.VITE_API_URL}itens`, {
         data: { userId, itemId },
       });
-
-      fetchData();
+      onRemove(item.id_item);
+      fetchData(); // Fetch updated data after removal
     } catch (error) {
       console.error("Erro ao remover o item:", error);
     }

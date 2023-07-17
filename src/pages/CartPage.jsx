@@ -15,7 +15,7 @@ export default function CartPage() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}itens/${userId}	`
+        `${import.meta.env.VITE_API_URL}itens/${userId}`
       );
       setCartItems(response.data);
     } catch (error) {
@@ -27,9 +27,17 @@ export default function CartPage() {
     try {
       await axios.delete(`${import.meta.env.VITE_API_URL}itens/${userId}`);
       console.log("Carrinho esvaziado com sucesso!");
+      setCartItems([]); // Limpa os itens do carrinho no estado
     } catch (err) {
       console.error("Erro ao esvaziar o carrinho:", err);
     }
+  };
+
+  const getTotalPrice = () => {
+    return cartItems.reduce(
+      (total, item) => total + item.preco * item.quantidade,
+      0
+    );
   };
 
   return (
@@ -45,7 +53,7 @@ export default function CartPage() {
       </CartItenContainer>
       <CartSummary>
         <CleanCartButton onClick={clearCart}>Esvaziar carrinho</CleanCartButton>
-        <TotalPrice>Total: $500</TotalPrice>
+        <TotalPrice>Total: ${getTotalPrice()}</TotalPrice>
         <CheckoutButton>Finalizar Compra</CheckoutButton>
       </CartSummary>
     </PageContainer>
