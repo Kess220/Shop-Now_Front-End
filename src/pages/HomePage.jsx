@@ -15,6 +15,8 @@ export default function HomePage() {
   const [showOptions, setShowOptions] = useState(false);
   const [logoClicked, setLogoClicked] = useState(false);
   const [products, setProducts] = useState([]);
+  const [userImage, setUserImage] = useState("");
+  const userId = localStorage.getItem("userId") || "";
 
   const handleLogoClick = () => {
     setShowOptions(!showOptions);
@@ -29,8 +31,6 @@ export default function HomePage() {
   };
 
   const navigate = useNavigate();
-  const profileImageUrl =
-    "https://ogimg.infoglobo.com.br/in/25339584-79f-886/FT1086A/laika-labradora-praia.jpg";
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -40,23 +40,23 @@ export default function HomePage() {
   }, [navigate]);
 
   useEffect(() => {
-    const fetchUserName = async () => {
+    const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/nome`,
+          `${import.meta.env.VITE_API_URL}profile/${userId}`,
           {
             headers: { Authorization: localStorage.getItem("token") },
           }
         );
-        const { nome } = response.data;
-        setUserName(nome);
+        const { image } = response.data;
+        setUserImage(image);
       } catch (error) {
-        console.error("Erro ao obter o nome do usuário:", error);
+        console.error("Error fetching user data:", error);
       }
     };
 
-    fetchUserName();
-  }, []);
+    fetchUserData();
+  }, [userId]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -103,14 +103,16 @@ export default function HomePage() {
         <ProfileContainer style={{ marginBottom: "16px" }}>
           <ProfileImageContainer>
             <Link to="/profile">
-              <ProfileImage src={profileImageUrl} alt="Profile" />
+              <ProfileImage src={userImage} alt="Profile" />
             </Link>
           </ProfileImageContainer>
         </ProfileContainer>
         <OptionIconContainer>
-          <OptionIcon>
-            <RiShoppingCartLine />
-          </OptionIcon>
+          <Link to="/cart">
+            <OptionIcon>
+              <RiShoppingCartLine />
+            </OptionIcon>
+          </Link>
         </OptionIconContainer>
 
         <OptionIconContainer onClick={handleLogout}>

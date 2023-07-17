@@ -206,18 +206,17 @@ export default function UserProfile() {
       <OptionsContainer show={showOptions}>
         <ProfileContainer style={{ marginBottom: "16px" }}>
           <ProfileImageContainer>
-            <Link to="/perfil">
-              <ProfileImage
-                src={profileImage || profileImageUrl}
-                alt="Profile"
-              />
+            <Link to="/home">
+              <ProfileImage src={profileImage} alt="Profile" />
             </Link>
           </ProfileImageContainer>
         </ProfileContainer>
         <OptionIconContainer>
-          <OptionIcon>
-            <RiShoppingCartLine />
-          </OptionIcon>
+          <Link to="/cart">
+            <OptionIcon>
+              <RiShoppingCartLine />
+            </OptionIcon>
+          </Link>
         </OptionIconContainer>
 
         <OptionIconContainer onClick={handleLogout}>
