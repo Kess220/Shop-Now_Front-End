@@ -4,6 +4,7 @@ import HomePage from "./pages/HomePage";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
 import CartPage from "./pages/CartPage";
+import Checkout from "./pages/Checkout";
 import PerfilPage from "./pages/PerfilPage";
 
 export default function App() {
@@ -15,7 +16,6 @@ export default function App() {
           <Route path="/cadastro" element={<SignUpPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/carrinho" element={<CartPage />} />
-          <Route path="/perfil" element={<PerfilPage />} />
         </Routes>
       </BrowserRouter>
     </PagesContainer>
