@@ -2,7 +2,24 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import gifAnimation from '../assets/W0zfpCnqF0.gif';
 import { useLocation } from 'react-router-dom';
+import axios from "axios";
 
+const SendEmail = async (userEmail, userName, city, zip, quantity, selectedProduct) => {
+  try {
+    await axios.post(
+      `${import.meta.env.VITE_API_URL}send-email`,{
+      cliente: userName,
+      produto: selectedProduct?.modelo,
+      preco: selectedProduct?.preco,
+      quantidade: quantity,
+      total: selectedProduct?.preco * quantity,
+      destinatario: userEmail,
+    });
+    console.log('E-mail enviado com sucesso');
+  } catch (error) {
+    console.error('Erro ao enviar o e-mail:', error);
+  }
+};
 
 const Container = styled.div`
   display: flex;
@@ -54,15 +71,12 @@ const Checkout = () => {
   const handleCheckout = () => {
     if (validateInputs()) {
       setIsCheckoutComplete(true);
-      sendEmail(name, address, city, zip, quantity);
+      SendEmail(userEmail, userName, city, zip, quantity, selectedProduct);
     } else {
       alert('Por favor, preencha todos os campos obrigatórios.');
     }
   };
 
-  const sendEmail = (name, address, city, zip) => {
-    console.log('Enviando email:', userEmail, userName, city, zip);
-  };
 
   const validateInputs = () => {
     return name !== '' && address !== '' && city !== '' && zip !== '';
