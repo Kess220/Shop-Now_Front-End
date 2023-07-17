@@ -94,17 +94,16 @@ export default function CartPage() {
   };
 
   const handleConfirmCheckout = () => {
-    // Lógica para confirmar a compra
+  
     console.log("Compra confirmada!");
 
-    // Salvar dados dos produtos e preço total no localStorage
+  
     const purchasedItems = [...cartItems];
     const totalPrice = cartItems.reduce(
       (total, item) => total + item.preco * item.quantidade,
       0
     );
-    const selectedProduct = purchasedItems[0]; // Aqui estou considerando apenas o primeiro item do carrinho
-
+    const selectedProduct = purchasedItems[0]; 
     const purchaseData = {
       purchasedItems,
       totalPrice,
@@ -113,7 +112,7 @@ export default function CartPage() {
     localStorage.setItem("purchaseData", JSON.stringify(purchaseData));
     console.log("Dados da compra salvos no localStorage:", purchaseData);
     
-    // Restaurar o estado inicial e redirecionar para a página de sucesso
+   
     setCartItems([]);
     setTotalPrice(0);
     setShowConfirmation(false);
