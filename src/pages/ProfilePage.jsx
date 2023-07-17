@@ -165,7 +165,7 @@ export default function UserProfile() {
       <OptionsContainer show={showOptions}>
         <ProfileContainer style={{ marginBottom: "16px" }}>
           <ProfileImageContainer>
-            <Link to="/perfil">
+            <Link to="/profile">
               <ProfileImage src={profileImageUrl} alt="Profile" />
             </Link>
           </ProfileImageContainer>
