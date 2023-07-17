@@ -52,7 +52,7 @@ const Checkout = () => {
   const handleCheckout = () => {
     if (validateInputs()) {
       setIsCheckoutComplete(true);
-      sendEmail(name, address, city, zip);
+      sendEmail(name, address, city, zip, quantity);
     } else {
       alert('Por favor, preencha todos os campos obrigatórios.');
     }
