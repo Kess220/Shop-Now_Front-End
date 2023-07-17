@@ -19,7 +19,7 @@ export default function CartPage() {
     fetchData();
   }, []);
 
-  const SendEmail = async (userEmail, userName, quantity, selectedProduct) => {
+  const SendEmail = async (userEmail, userName, city, zip, quantity, item) => {
     // Acesso aos dados dos produtos
     const purchaseData = JSON.parse(localStorage.getItem("purchaseData"));
     const purchasedItems = purchaseData.purchasedItems;
@@ -118,7 +118,7 @@ export default function CartPage() {
     setTotalPrice(0);
     setShowConfirmation(false);
     setIsCheckoutComplete(true);
-    SendEmail(userEmail, userName, quantity, selectedProduct);
+    SendEmail(userEmail, userName, null, null, quantity, selectedProduct)
     clearCart();
   };
 
