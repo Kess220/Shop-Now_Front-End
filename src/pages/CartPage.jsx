@@ -28,6 +28,7 @@ export default function CartPage() {
       await axios.delete(`${import.meta.env.VITE_API_URL}itens/${userId}`);
       console.log("Carrinho esvaziado com sucesso!");
       setCartItems([]);
+      updateTotalPrice(); // Atualiza o total após esvaziar o carrinho
     } catch (err) {
       console.error("Erro ao esvaziar o carrinho:", err);
     }
@@ -36,6 +37,7 @@ export default function CartPage() {
   const handleRemoveItem = (itemId) => {
     const updatedItems = cartItems.filter((item) => item.id_item !== itemId);
     setCartItems(updatedItems);
+    updateTotalPrice(); // Atualiza o total após remover um item
   };
 
   const getTotalPrice = () => {
@@ -49,6 +51,16 @@ export default function CartPage() {
     });
   };
 
+  const updateTotalPrice = () => {
+    const totalPrice = cartItems.reduce(
+      (total, item) => total + item.preco * item.quantidade,
+      0
+    );
+    setTotalPrice(totalPrice);
+  };
+
+  const [totalPrice, setTotalPrice] = useState(0);
+
   return (
     <PageContainer>
       <Header>
@@ -61,12 +73,14 @@ export default function CartPage() {
             key={item._id}
             item={item}
             onRemove={() => handleRemoveItem(item.id_item)}
+            onUpdateTotal={updateTotalPrice} // Passa a função para atualizar o total
           />
         ))}
       </CartItenContainer>
+
       <CartSummary>
         <CleanCartButton onClick={clearCart}>Esvaziar carrinho</CleanCartButton>
-        <TotalPrice>Total: ${getTotalPrice()}</TotalPrice>
+        <TotalPrice>Total: {getTotalPrice()}</TotalPrice>
         <CheckoutButton>Finalizar Compra</CheckoutButton>
       </CartSummary>
     </PageContainer>

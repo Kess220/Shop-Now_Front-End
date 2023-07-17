@@ -4,8 +4,13 @@ import { trashOutline } from "ionicons/icons";
 import { IonIcon } from "@ionic/react";
 import axios from "axios";
 
-const CartItem = ({ item, onIncrease, onDecrease, onRemove }) => {
-  console.log("item:", item);
+const CartItem = ({
+  item,
+  onIncrease,
+  onDecrease,
+  onRemove,
+  onUpdateTotal,
+}) => {
   const [cartItems, setCartItems] = useState([]);
 
   const fetchData = async () => {
@@ -34,9 +39,8 @@ const CartItem = ({ item, onIncrease, onDecrease, onRemove }) => {
         { userId }
       );
 
-      // Atualiza o valor diretamente no objeto item
       item.quantidade++;
-
+      onUpdateTotal(); // Atualiza o total no componente pai
       fetchData(); // Fetch updated data after increase
     } catch (error) {
       console.error("Erro ao aumentar a quantidade:", error);
@@ -54,9 +58,8 @@ const CartItem = ({ item, onIncrease, onDecrease, onRemove }) => {
           { userId }
         );
 
-        // Atualiza o valor diretamente no objeto item
         item.quantidade--;
-
+        onUpdateTotal(); // Atualiza o total no componente pai
         fetchData(); // Fetch updated data after decrease
       } catch (error) {
         console.error("Erro ao diminuir a quantidade:", error);
@@ -72,7 +75,8 @@ const CartItem = ({ item, onIncrease, onDecrease, onRemove }) => {
         data: { userId, itemId },
       });
 
-      onRemove(item.id_item);
+      onRemove(item.id_item); // Chama a função de remoção no componente pai
+      onUpdateTotal(); // Atualiza o total no componente pai
     } catch (error) {
       console.error("Erro ao remover o item:", error);
     }
