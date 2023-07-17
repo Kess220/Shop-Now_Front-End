@@ -43,7 +43,7 @@ const Checkout = () => {
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
   const [zip, setZip] = useState('');
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(1);
   const location = useLocation();
   const selectedProduct = location.state?.product;
   console.log(selectedProduct);
