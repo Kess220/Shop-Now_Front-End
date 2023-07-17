@@ -39,11 +39,16 @@ export default function CartPage() {
   };
 
   const getTotalPrice = () => {
-    return cartItems.reduce(
+    const total = cartItems.reduce(
       (total, item) => total + item.preco * item.quantidade,
       0
     );
+    return total.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    });
   };
+  
 
   return (
     <PageContainer>
