@@ -11,6 +11,7 @@ export default function SignUpPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [imageUrl, setImageUrl] = useState(""); // Novo estado para a URL da imagem
 
   const handleNameChange = (event) => {
     setName(event.target.value);
@@ -28,6 +29,10 @@ export default function SignUpPage() {
     setConfirmPassword(event.target.value);
   };
 
+  const handleImageUrlChange = (event) => {
+    setImageUrl(event.target.value);
+  }; // Novo manipulador de eventos para a URL da imagem
+
   const handleSignUpSubmit = async (event) => {
     event.preventDefault();
 
@@ -41,6 +46,7 @@ export default function SignUpPage() {
         name,
         email,
         password,
+        image: imageUrl, // Enviar a URL da imagem para o backend
       });
 
       // Redirecionar o usuário para a página de login
@@ -91,6 +97,14 @@ export default function SignUpPage() {
           value={confirmPassword}
           onChange={handleConfirmPasswordChange}
         />
+        <input
+          placeholder="URL da imagem"
+          data-test="image-url"
+          type="text"
+          value={imageUrl}
+          onChange={handleImageUrlChange}
+        />{" "}
+        {}
         <StyledButton data-test="sign-up-submit" type="submit">
           Cadastrar
         </StyledButton>

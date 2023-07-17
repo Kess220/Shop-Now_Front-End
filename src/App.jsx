@@ -16,6 +16,8 @@ export default function App() {
           <Route path="/cadastro" element={<SignUpPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/carrinho" element={<CartPage />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/perfil" element={<PerfilPage />} />
         </Routes>
       </BrowserRouter>
     </PagesContainer>
