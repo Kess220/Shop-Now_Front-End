@@ -38,6 +38,9 @@ const Button = styled.button`
 `;
 
 const Checkout = () => {
+  const userEmail = localStorage.getItem('userEmail');
+  const userName = localStorage.getItem("userName");
+
   const [isCheckoutComplete, setIsCheckoutComplete] = useState(false);
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
@@ -58,7 +61,7 @@ const Checkout = () => {
   };
 
   const sendEmail = (name, address, city, zip) => {
-    console.log('Enviando email:', name, address, city, zip);
+    console.log('Enviando email:', userEmail, userName, city, zip);
   };
 
   const validateInputs = () => {
