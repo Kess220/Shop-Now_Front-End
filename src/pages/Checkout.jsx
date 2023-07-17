@@ -3,8 +3,6 @@ import styled from 'styled-components';
 import gifAnimation from '../assets/W0zfpCnqF0.gif';
 import { useLocation } from 'react-router-dom';
 import { IonIcon } from "@ionic/react";
-import { trashOutline } from "ionicons/icons";
-
 
 
 const Container = styled.div`
@@ -120,9 +118,6 @@ const Checkout = () => {
                   <span>{selectedProduct.quantidade}</span>
                   <QuantityButton>+</QuantityButton>
                 </QuantityContainer>
-                <DeleteButton>
-                  <IonIcon icon={trashOutline} />
-                </DeleteButton>
               </ProductContainer>
             </HomeContainer>
             </>
