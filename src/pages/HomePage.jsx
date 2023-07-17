@@ -69,6 +69,7 @@ export default function HomePage() {
         );
         const productsData = response.data || [];
         setProducts(productsData);
+        console.log(productsData);
       } catch (error) {
         console.error("Erro ao obter os produtos:", error);
       }
@@ -80,6 +81,10 @@ export default function HomePage() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/");
+  };
+  const handleAddToCart = () => {
+    // Lógica para adicionar produto ao carrinho
+    console.log("Produto adicionado ao carrinho!");
   };
 
   return (
@@ -93,7 +98,11 @@ export default function HomePage() {
 
       <ProductContainer>
         {products.map((product) => (
-          <ProductCard key={product._id.$oid} product={product} />
+          <ProductCard
+            key={product._id.$oid}
+            product={product}
+            onAddToCart={handleAddToCart}
+          />
         ))}
       </ProductContainer>
 

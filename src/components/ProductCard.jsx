@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { useSpring, animated } from "react-spring";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, onAddToCart }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const navigate = useNavigate();
+  const userId = localStorage.getItem("userId") || "";
 
   const fade = useSpring({
     from: { opacity: 0 },
@@ -37,7 +39,28 @@ const ProductCard = ({ product }) => {
 
   const handleBuyNow = () => {
     setSelectedProduct(product);
-    navigate('/checkout', { state: { product } });
+    navigate("/checkout", { state: { product } });
+  };
+
+  const handleAddToCart = async () => {
+    try {
+      const newItem = {
+        id_usuario: userId,
+        id_item: product._id,
+        modelo: product.modelo,
+        marca: product.marca,
+        preco: product.preco,
+        descricao: product.descricao,
+        imgs: product.imgs,
+        quantidade: 1,
+      };
+
+      await axios.post(`${import.meta.env.VITE_API_URL}itens`, newItem);
+      console.log("Produto adicionado ao carrinho com sucesso!");
+      console.log(newItem);
+    } catch (error) {
+      console.error("Erro ao adicionar o produto ao carrinho:", error);
+    }
   };
 
   return (
@@ -49,7 +72,9 @@ const ProductCard = ({ product }) => {
         <ProductName>{product.modelo}</ProductName>
         <ProductPrice>R$ {product.preco}</ProductPrice>
         <ActionButtons>
-          <AddToCartButton>Adicionar ao Carrinho</AddToCartButton>
+          <AddToCartButton onClick={handleAddToCart}>
+            Adicionar ao Carrinho
+          </AddToCartButton>
           <BuyNowButton onClick={handleBuyNow}>Comprar Agora</BuyNowButton>
         </ActionButtons>
       </CardContent>
@@ -72,7 +97,9 @@ const ProductCard = ({ product }) => {
                 <ProductPrice>R$ {product.preco}</ProductPrice>
                 <ActionButtons>
                   <AddToCartButton>Adicionar ao Carrinho</AddToCartButton>
-                  <BuyNowButton onClick={handleBuyNow}>Comprar Agora</BuyNowButton>
+                  <BuyNowButton onClick={handleBuyNow}>
+                    Comprar Agora
+                  </BuyNowButton>
                 </ActionButtons>
               </ModalDetails>
             </ModalContent>
