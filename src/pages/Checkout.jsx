@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import gifAnimation from '../assets/W0zfpCnqF0.gif';
 import { useLocation } from 'react-router-dom';
 import { IonIcon } from "@ionic/react";
-
+import { addOutline, removeOutline } from "ionicons/icons";
 
 const Container = styled.div`
   display: flex;
@@ -44,6 +44,7 @@ const Checkout = () => {
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
   const [zip, setZip] = useState('');
+  const [quantity, setQuantity] = useState(0);
   const location = useLocation();
   const selectedProduct = location.state?.product;
   console.log(selectedProduct);
@@ -63,6 +64,16 @@ const Checkout = () => {
 
   const validateInputs = () => {
     return name !== '' && address !== '' && city !== '' && zip !== '';
+  };
+
+  const handleDecreaseQuantity = () => {
+    if (quantity > 0) {
+      setQuantity(quantity - 1);
+    }
+  };
+
+  const handleIncreaseQuantity = () => {
+    setQuantity(quantity + 1);
   };
 
   const CompletedContainer = styled.div`
@@ -104,36 +115,38 @@ const Checkout = () => {
           <Title>Checkout</Title>
           {selectedProduct && (
             <>
-             <HomeContainer>
-              <ProductContainer>
-                <ProductImage src={selectedProduct.imgs[0]} alt="foto" />
-                <ProductInfo>
-                  <ProductName>{selectedProduct.modelo}</ProductName>
-                  <PriceContainer>
-                    <Price>${selectedProduct.preco}</Price>
-                  </PriceContainer>
-                </ProductInfo>
-                <QuantityContainer>
-                  <QuantityButton>-</QuantityButton>
-                  <span>{selectedProduct.quantidade}</span>
-                  <QuantityButton>+</QuantityButton>
-                </QuantityContainer>
-              </ProductContainer>
-            </HomeContainer>
+              <HomeContainer>
+                <ProductContainer>
+                  <ProductImage src={selectedProduct.imgs[0]} alt="foto" />
+                  <ProductInfo>
+                    <ProductName>{selectedProduct.modelo}</ProductName>
+                    <PriceContainer>
+                      <Price>${selectedProduct.preco}</Price>
+                    </PriceContainer>
+                  </ProductInfo>
+                  <QuantityContainer>
+                    <QuantityButton onClick={handleDecreaseQuantity}>
+                      <IonIcon icon={removeOutline} />
+                    </QuantityButton>
+                    <span>{quantity}</span>
+                    <QuantityButton onClick={handleIncreaseQuantity}>
+                      <IonIcon icon={addOutline} />
+                    </QuantityButton>
+                  </QuantityContainer>
+                </ProductContainer>
+              </HomeContainer>
             </>
           )}
           <Input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />
           <Input type="text" placeholder="Address" value={address} onChange={(e) => setAddress(e.target.value)} required />
           <Input type="text" placeholder="City" value={city} onChange={(e) => setCity(e.target.value)} required />
           <Input type="text" placeholder="Zip" value={zip} onChange={(e) => setZip(e.target.value)} required />
-          <Button onClick={handleCheckout}>Checkout</Button>
+          <Button onClick={handleCheckout}>Finalizar a Compra</Button>
         </>
       )}
     </Container>
   );
 };
-
-
 
 const HomeContainer = styled.div`
   display: flex;
@@ -196,15 +209,5 @@ const QuantityButton = styled.button`
   border: none;
   margin: 0 5px;
 `;
-
-const DeleteButton = styled.button`
-  background-color: transparent;
-  width: 10%;
-  border: none;
-  color: #cc0000;
-  cursor: pointer;
-  font-size: 20px;
-`;
-
 
 export default Checkout;
