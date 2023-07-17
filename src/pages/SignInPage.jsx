@@ -27,7 +27,6 @@ export default function SignInPage() {
       // Armazenar o token e o userId no localStorage
       localStorage.setItem("token", token);
       localStorage.setItem("userId", userId);
-      localStorage.setItem("userId", email);
 
       // Redirecionar o usuário para a rota "/home"
       navigate("/home");
