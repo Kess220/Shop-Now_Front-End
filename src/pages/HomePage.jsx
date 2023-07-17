@@ -11,14 +11,12 @@ import ProductCard from "../components/ProductCard";
 import { useTransition, animated } from "react-spring";
 
 export default function HomePage() {
+  const [userName, setUserName] = useState("");
   const [showOptions, setShowOptions] = useState(false);
   const [logoClicked, setLogoClicked] = useState(false);
   const [products, setProducts] = useState([]);
   const [userImage, setUserImage] = useState("");
   const userId = localStorage.getItem("userId") || "";
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-
 
   const handleLogoClick = () => {
     setShowOptions(!showOptions);
@@ -50,13 +48,8 @@ export default function HomePage() {
             headers: { Authorization: localStorage.getItem("token") },
           }
         );
-        const { image, username, email } = response.data;
+        const { image } = response.data;
         setUserImage(image);
-        localStorage.setItem('userEmail', email);
-        localStorage.setItem('userName', username);
-
-       
-
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
