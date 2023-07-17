@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import gifAnimation from '../assets/W0zfpCnqF0.gif';
+import { useLocation } from 'react-router-dom';
+
 
 
 const Container = styled.div`
@@ -39,9 +41,11 @@ const Button = styled.button`
 
 const Checkout = () => {
   const [isCheckoutComplete, setIsCheckoutComplete] = useState(false);
+  const location = useLocation();
+  const selectedProduct = location.state?.product;
+  console.log(`${selectedProduct.modelo} checked out`);
 
   const handleCheckout = () => {
-    
     setIsCheckoutComplete(true);
   };
 

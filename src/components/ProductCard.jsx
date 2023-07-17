@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { useSpring, animated } from "react-spring";
-import { Link } from 'react-router-dom';
-
-
+import { Link, useNavigate } from 'react-router-dom';
 
 const ProductCard = ({ product }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const navigate = useNavigate();
 
   const fade = useSpring({
     from: { opacity: 0 },
@@ -35,6 +35,11 @@ const ProductCard = ({ product }) => {
     );
   };
 
+  const handleBuyNow = () => {
+    setSelectedProduct(product);
+    navigate('/checkout', { state: { product } });
+  };
+
   return (
     <Card>
       <ImageContainer onClick={openModal}>
@@ -45,7 +50,7 @@ const ProductCard = ({ product }) => {
         <ProductPrice>R$ {product.preco}</ProductPrice>
         <ActionButtons>
           <AddToCartButton>Adicionar ao Carrinho</AddToCartButton>
-          <BuyNowButton><Link to="/checkout">Comprar Agora</Link></BuyNowButton>
+          <BuyNowButton onClick={handleBuyNow}>Comprar Agora</BuyNowButton>
         </ActionButtons>
       </CardContent>
       {isModalOpen && (
@@ -67,7 +72,7 @@ const ProductCard = ({ product }) => {
                 <ProductPrice>R$ {product.preco}</ProductPrice>
                 <ActionButtons>
                   <AddToCartButton>Adicionar ao Carrinho</AddToCartButton>
-                  <BuyNowButton><Link to="/checkout">Comprar Agora</Link></BuyNowButton>
+                  <BuyNowButton onClick={handleBuyNow}>Comprar Agora</BuyNowButton>
                 </ActionButtons>
               </ModalDetails>
             </ModalContent>
