@@ -1,10 +1,66 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { trashOutline } from "ionicons/icons";
 import { IonIcon } from "@ionic/react";
+import axios from "axios";
 
-const CartItem = ({ item }) => {
+const CartItem = ({ item, onIncrease, onDecrease, onRemove }) => {
   console.log("item:", item);
+  const [cartItems, setCartItems] = useState([]);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}itens/${userId}	`
+      );
+      setCartItems(response.data);
+    } catch (error) {
+      console.error("Error fetching cart data:", error);
+    }
+  };
+  const handleIncrease = async () => {
+    try {
+      const userId = localStorage.getItem("userId");
+      await axios.put(
+        `${import.meta.env.VITE_API_URL}itens/${
+          item.id_item
+        }/aumentar-quantidade`,
+        { userId }
+      );
+      onIncrease(item.id_item);
+    } catch (error) {
+      console.error("Erro ao aumentar a quantidade:", error);
+    }
+  };
+
+  const handleDecrease = async () => {
+    try {
+      const userId = localStorage.getItem("userId");
+      await axios.put(
+        `${import.meta.env.VITE_API_URL}itens/${
+          item.id_item
+        }/diminuir-quantidade`,
+        { userId }
+      );
+      onDecrease(item.id_item);
+    } catch (error) {
+      console.error("Erro ao diminuir a quantidade:", error);
+    }
+  };
+
+  const handleRemove = async () => {
+    try {
+      const userId = localStorage.getItem("userId");
+      const itemId = item.id_item;
+      await axios.delete(`${import.meta.env.VITE_API_URL}itens`, {
+        data: { userId, itemId },
+      });
+
+      fetchData();
+    } catch (error) {
+      console.error("Erro ao remover o item:", error);
+    }
+  };
 
   return (
     <HomeContainer>
@@ -17,11 +73,11 @@ const CartItem = ({ item }) => {
           </PriceContainer>
         </ProductInfo>
         <QuantityContainer>
-          <QuantityButton>-</QuantityButton>
+          <QuantityButton onClick={handleDecrease}>-</QuantityButton>
           <span>{item.quantidade}</span>
-          <QuantityButton>+</QuantityButton>
+          <QuantityButton onClick={handleIncrease}>+</QuantityButton>
         </QuantityContainer>
-        <DeleteButton>
+        <DeleteButton onClick={handleRemove}>
           <IonIcon icon={trashOutline} />
         </DeleteButton>
       </ProductContainer>
