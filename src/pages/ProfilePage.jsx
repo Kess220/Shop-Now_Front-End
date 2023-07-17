@@ -32,23 +32,22 @@ export default function UserProfile() {
   };
 
   const navigate = useNavigate();
-
-  const userId = localStorage.getItem("userId");
+  const profileImageUrl =
+    "https://ogimg.infoglobo.com.br/in/25339584-79f-886/FT1086A/laika-labradora-praia.jpg";
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}profile/${userId}`,
+          `${import.meta.env.VITE_API_URL}/profile/${userId}`, // Atualize o endpoint da API com a rota correta
           {
             headers: { Authorization: localStorage.getItem("token") },
           }
         );
-        const { username, email, image } = response.data;
+        const { username, email, image } = response.data; // Atualize as chaves dos dados recebidos
         setUserName(username);
         setEmail(email);
         setProfileImage(image);
-        console.log("Profile Image:", image); // Adicione esta linha
         setOriginalName(username);
         setOriginalEmail(email);
       } catch (error) {
@@ -57,11 +56,10 @@ export default function UserProfile() {
     };
 
     fetchUserData();
-  }, [userId]);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("userId");
     navigate("/");
   };
 
@@ -69,24 +67,10 @@ export default function UserProfile() {
     setIsEditing(true);
   };
 
-  const handleSaveClick = async () => {
-    try {
-      if (!userName || !email) {
-        // Verifica se userName ou email estão vazios
-        throw new Error("Name and email cannot be empty");
-      }
-
-      const response = await axios.put(
-        `${import.meta.env.VITE_API_URL}profile/update-email/${userId}`,
-        { email: email || originalEmail }, // Mantém o valor original do email se estiver vazio
-        { headers: { Authorization: localStorage.getItem("token") } }
-      );
-      console.log("Profile updated:", response.data);
-      setIsEditing(false);
-      setOriginalEmail(email || originalEmail); // Mantém o valor original do email se estiver vazio
-    } catch (error) {
-      console.error("Error updating profile:", error);
-    }
+  const handleSaveClick = () => {
+    setIsEditing(false);
+    setOriginalName(userName);
+    setOriginalEmail(email);
   };
 
   const handleCancelClick = () => {
@@ -118,7 +102,7 @@ export default function UserProfile() {
   return (
     <HomeContainer>
       <Header>
-        <h1>Show Now</h1>
+        <h1 data-test="user-name">{userName}</h1>
         <LogoContainer onClick={handleLogoClick} logoClicked={logoClicked}>
           <LogoImage src={Logo} alt="Logo" />
         </LogoContainer>
@@ -131,7 +115,7 @@ export default function UserProfile() {
           isHovered={isHovered}
           onClick={handleEditClick}
         >
-          <AvatarImage src={profileImage} alt="Profile" />
+          <AvatarImage src={profileImage || profileImageUrl} alt="Profile" />
           <EditIconContainer isHovered={isHovered}>
             <EditIcon>
               <IoMdCreate />
@@ -181,11 +165,8 @@ export default function UserProfile() {
       <OptionsContainer show={showOptions}>
         <ProfileContainer style={{ marginBottom: "16px" }}>
           <ProfileImageContainer>
-            <Link to="/perfil">
-              <ProfileImage
-                src={profileImage || profileImageUrl}
-                alt="Profile"
-              />
+            <Link to="/profile">
+              <ProfileImage src={profileImageUrl} alt="Profile" />
             </Link>
           </ProfileImageContainer>
         </ProfileContainer>

@@ -5,7 +5,7 @@ import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
 import CartPage from "./pages/CartPage";
 import Checkout from "./pages/Checkout";
-import PerfilPage from "./pages/PerfilPage";
+import ProfilePage from "./pages/ProfilePage";
 
 export default function App() {
   return (
@@ -13,9 +13,11 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<SignInPage />} />
-          <Route path="/cadastro" element={<SignUpPage />} />
+          <Route path="/register" element={<SignUpPage />} />
           <Route path="/home" element={<HomePage />} />
-          <Route path="/carrinho" element={<CartPage />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/checkout" element={<Checkout />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/perfil" element={<PerfilPage />} />
         </Routes>
