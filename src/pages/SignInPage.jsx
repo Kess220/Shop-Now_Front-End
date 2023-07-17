@@ -69,7 +69,7 @@ export default function SignInPage() {
         {error && <ErrorMessage>{error}</ErrorMessage>}
       </form>
 
-      <Link to="/cadastro">Não tem uma conta? Cadastre-se aqui!</Link>
+      <Link to="/register">Não tem uma conta? Cadastre-se aqui!</Link>
     </SignInContainer>
   );
 }
