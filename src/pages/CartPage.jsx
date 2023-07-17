@@ -15,6 +15,26 @@ export default function CartPage() {
     fetchData();
   }, []);
 
+  const SendEmail = async (userEmail, userName, quantity, selectedProduct) => {
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}send-email`,{
+        cliente: userName,
+        produto: selectedProduct?.modelo,
+        preco: selectedProduct?.preco,
+        quantidade: quantity,
+        total: (selectedProduct?.preco * quantity).toLocaleString('pt-BR', {
+          style: 'currency',
+          currency: 'BRL',
+        }),
+        destinatario: userEmail,
+      });
+      console.log('E-mail enviado com sucesso para',userEmail,userName);
+    } catch (error) {
+      console.error('Erro ao enviar o e-mail:', error);
+    }
+  };
+
   const fetchData = async () => {
     try {
       const response = await axios.get(
@@ -90,6 +110,7 @@ export default function CartPage() {
     setTotalPrice(0);
     setShowConfirmation(false);
     setIsCheckoutComplete(true);
+    SendEmail(userEmail, userName, quantity, selectedProduc)
     clearCart();
   };
 
