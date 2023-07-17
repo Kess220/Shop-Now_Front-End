@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import gifAnimation from '../assets/W0zfpCnqF0.gif';
 import { useLocation } from 'react-router-dom';
-import { IonIcon } from "@ionic/react";
-import { addOutline, removeOutline } from "ionicons/icons";
+
 
 const Container = styled.div`
   display: flex;
