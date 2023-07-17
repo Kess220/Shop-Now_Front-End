@@ -34,6 +34,9 @@ const CartItem = ({ item, onIncrease, onDecrease, onRemove }) => {
         { userId }
       );
 
+      // Atualiza o valor diretamente no objeto item
+      item.quantidade++;
+
       fetchData(); // Fetch updated data after increase
     } catch (error) {
       console.error("Erro ao aumentar a quantidade:", error);
@@ -51,6 +54,9 @@ const CartItem = ({ item, onIncrease, onDecrease, onRemove }) => {
           { userId }
         );
 
+        // Atualiza o valor diretamente no objeto item
+        item.quantidade--;
+
         fetchData(); // Fetch updated data after decrease
       } catch (error) {
         console.error("Erro ao diminuir a quantidade:", error);
@@ -65,8 +71,8 @@ const CartItem = ({ item, onIncrease, onDecrease, onRemove }) => {
       await axios.delete(`${import.meta.env.VITE_API_URL}itens`, {
         data: { userId, itemId },
       });
+
       onRemove(item.id_item);
-      fetchData(); // Fetch updated data after removal
     } catch (error) {
       console.error("Erro ao remover o item:", error);
     }

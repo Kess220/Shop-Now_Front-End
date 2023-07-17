@@ -33,6 +33,11 @@ export default function CartPage() {
     }
   };
 
+  const handleRemoveItem = (itemId) => {
+    const updatedItems = cartItems.filter((item) => item.id_item !== itemId);
+    setCartItems(updatedItems);
+  };
+
   const getTotalPrice = () => {
     return cartItems.reduce(
       (total, item) => total + item.preco * item.quantidade,
@@ -48,7 +53,11 @@ export default function CartPage() {
       </Header>
       <CartItenContainer>
         {cartItems.map((item) => (
-          <CartItem key={item._id} item={item} />
+          <CartItem
+            key={item._id}
+            item={item}
+            onRemove={() => handleRemoveItem(item.id_item)}
+          />
         ))}
       </CartItenContainer>
       <CartSummary>
