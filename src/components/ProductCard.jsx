@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 import styled from "styled-components";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
@@ -32,6 +33,25 @@ const ProductCard = ({ product }) => {
     );
   };
 
+//adicionar no carrinho
+const addItemToCart = async () => {
+  try {
+    const item = {
+      modelo: product.modelo,
+      marca: product.marca,
+      preco: product.preco,
+      imgs: product.imgs,
+      itemId: product._id,
+      // quantidade: 1,
+    };
+    console.log(item)
+    await axios.post(`${import.meta.env.VITE_API_URL}itens`, item); 
+    console.log('Item adicionado ao carrinho com sucesso!');
+  } catch (err) {
+    console.error('Erro ao adicionar item ao carrinho:', err);
+  }
+};
+
   return (
     <Card>
       <ImageContainer onClick={openModal}>
@@ -41,7 +61,7 @@ const ProductCard = ({ product }) => {
         <ProductName>{product.modelo}</ProductName>
         <ProductPrice>R$ {product.preco}</ProductPrice>
         <ActionButtons>
-          <AddToCartButton>Adicionar ao Carrinho</AddToCartButton>
+          <AddToCartButton onClick={addItemToCart}>Adicionar ao Carrinho</AddToCartButton>
           <BuyNowButton>Comprar Agora</BuyNowButton>
         </ActionButtons>
       </CardContent>

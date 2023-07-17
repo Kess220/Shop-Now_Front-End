@@ -19,7 +19,7 @@ export default function App() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="/perfil" element={<PerfilPage />} />
+          <Route path="/perfil" element={<ProfilePage />} />
         </Routes>
       </BrowserRouter>
     </PagesContainer>
