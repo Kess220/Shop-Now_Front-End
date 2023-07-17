@@ -40,8 +40,8 @@ const CartItem = ({
       );
 
       item.quantidade++;
-      onUpdateTotal(); 
-      fetchData(); 
+      onUpdateTotal();
+      fetchData();
     } catch (error) {
       console.error("Erro ao aumentar a quantidade:", error);
     }
@@ -59,8 +59,8 @@ const CartItem = ({
         );
 
         item.quantidade--;
-        onUpdateTotal(); 
-        fetchData(); 
+        onUpdateTotal();
+        fetchData();
       } catch (error) {
         console.error("Erro ao diminuir a quantidade:", error);
       }
@@ -75,8 +75,8 @@ const CartItem = ({
         data: { userId, itemId },
       });
 
-      onRemove(item.id_item); /
-      onUpdateTotal(); 
+      onRemove(item.id_item);
+      onUpdateTotal();
     } catch (error) {
       console.error("Erro ao remover o item:", error);
     }
