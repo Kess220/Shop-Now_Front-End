@@ -112,7 +112,7 @@ export default function CartPage() {
 
     localStorage.setItem("purchaseData", JSON.stringify(purchaseData));
     console.log("Dados da compra salvos no localStorage:", purchaseData);
-
+    
     // Restaurar o estado inicial e redirecionar para a página de sucesso
     setCartItems([]);
     setTotalPrice(0);
