@@ -4,6 +4,7 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { useSpring, animated } from "react-spring";
 import { Link } from "react-router-dom";
 
+
 const ProductCard = ({ product }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -43,9 +44,7 @@ const ProductCard = ({ product }) => {
         <ProductPrice>R$ {product.preco}</ProductPrice>
         <ActionButtons>
           <AddToCartButton>Adicionar ao Carrinho</AddToCartButton>
-          <BuyNowButton>
-            <Link to="/checkout">Comprar Agora</Link>
-          </BuyNowButton>
+          <BuyNowButton>Comprar Agora</BuyNowButton>
         </ActionButtons>
       </CardContent>
       {isModalOpen && (
@@ -67,9 +66,7 @@ const ProductCard = ({ product }) => {
                 <ProductPrice>R$ {product.preco}</ProductPrice>
                 <ActionButtons>
                   <AddToCartButton>Adicionar ao Carrinho</AddToCartButton>
-                  <BuyNowButton>
-                    <Link to="/checkout">Comprar Agora</Link>
-                  </BuyNowButton>
+                  <BuyNowButton>Comprar Agora</BuyNowButton>
                 </ActionButtons>
               </ModalDetails>
             </ModalContent>
