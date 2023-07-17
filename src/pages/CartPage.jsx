@@ -2,8 +2,50 @@ import React from "react";
 import styled from "styled-components";
 import CartItem from "../components/CartItem";
 import Logo from "/store.png";
+import axios from "axios";
+import { func } from "prop-types";
 
 export default function CartPage() {
+
+  // adicionar item no carrinho
+
+  // const addItemToCart = async () => {
+  //   try {
+  //     const item = {
+  //       modelo: product.modelo,
+  //       marca: product.marca,
+  //       preco: product.preco,
+  //       imgs: product.imgs,
+  //       itemId: product._id,
+  //       quantidade: 1,
+  //     };
+  //     await axios.post('/itens', item);
+  //     console.log('Item adicionado ao carrinho com sucesso!');
+  //   } catch (err) {
+  //     console.error('Erro ao adicionar item ao carrinho:', err);
+  //   }
+  // };
+
+  // onClick = { addItemToCart }
+
+
+
+ 
+
+
+
+
+
+  //limpar carrinho
+  const clearCart = async () => {
+    try {
+      await axios.delete('/itens')
+      console.log('Carrinho esvaziado com sucesso!');
+    } catch (err) {
+      console.error('Erro ao esvaziar o carrinho:', err);
+    }
+  }
+
   return (
     <PageContainer>
       <Header>
@@ -12,16 +54,11 @@ export default function CartPage() {
       </Header>
       <CartItenContainer>
         <CartItem />
-        <CartItem />
-        <CartItem />
-        <CartItem />
-        <CartItem />
-        <CartItem />
       </CartItenContainer>
       <CartSummary>
-        <CleanCartButton>Esvaziar carrinho</CleanCartButton>
+        <CleanCartButton onClick={clearCart}>Esvaziar carrinho</CleanCartButton>
         <TotalPrice>Total: $500</TotalPrice>
-        <CheckoutButton>Finalizar Compra</CheckoutButton>
+        <CheckoutButton >Finalizar Compra</CheckoutButton>
       </CartSummary>
     </PageContainer>
   );

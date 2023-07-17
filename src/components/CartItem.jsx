@@ -3,23 +3,55 @@ import styled from "styled-components";
 import { trashOutline } from 'ionicons/icons';
 import { IonIcon } from '@ionic/react';
 
-const CartItem = ({ item }) => {
+const CartItem = ({ product}) => {
+
+  //aumentar 1 na quantidade
+  const increaseQuantity = async () => {
+    try {
+      await axios.put(`/itens/${item._id}/aumentar-quantidade`);
+      console.log('Quantidade do item aumentada com sucesso!');
+    } catch (err) {
+      console.error('Erro ao aumentar a quantidade do item:', err);
+    }
+  };
+
+  //diminuir 1 na quantidade
+  const decreaseQuantity = async () => {
+    try {
+      await axios.put(`/itens/${item._id}/diminuir-quantidade`);
+      console.log('Quantidade do item diminuída com sucesso!');
+    } catch (err) {
+      console.error('Erro ao diminuir a quantidade do item:', err);
+    }
+  };
+
+  //remover item
+  const removeItem = async () => {
+    try {
+      await axios.delete(`/itens/${item._id}`); 
+      console.log('Item removido com sucesso!');
+    } catch (error) {
+      console.error('Erro ao remover o item:', error);
+    }
+  };
+
   return (
+
     <HomeContainer>
       <ProductContainer>
-        <ProductImage src="https://imgs.extra.com.br/55014765/1xg.jpg" alt="foto" />
+        <ProductImage src={product.image[0]} alt={product.modelo} />
         <ProductInfo>
-          <ProductName>Samsung galaxy s20</ProductName>
+          <ProductName>{product.modelo}</ProductName>
           <PriceContainer>
-            <Price>$200</Price>
+            <Price>R$ {product.preco}</Price>
           </PriceContainer>
         </ProductInfo>
         <QuantityContainer>
-          <QuantityButton>-</QuantityButton>
-          <span>2</span>
-          <QuantityButton>+</QuantityButton>
+          <QuantityButton onClick={decreaseQuantity}>-</QuantityButton>
+          <span>{product.quantidade}</span>
+          <QuantityButton onClick={increaseQuantity}>+</QuantityButton>
         </QuantityContainer>
-        <DeleteButton>
+        <DeleteButton onClick={removeItem}>
           <IonIcon icon={trashOutline} />
         </DeleteButton>
       </ProductContainer>
