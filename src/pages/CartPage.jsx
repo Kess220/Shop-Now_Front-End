@@ -6,6 +6,7 @@ import CartItem from "../components/CartItem";
 
 export default function CartPage() {
   const [cartItems, setCartItems] = useState([]);
+  const userId = "64b546dc41498ad8a5eec8ad"; // Exemplo: substitua pelo userId do usuário logado
 
   useEffect(() => {
     fetchData();
@@ -13,7 +14,9 @@ export default function CartPage() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}itens`);
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}itens/${userId}`
+      );
       setCartItems(response.data);
     } catch (error) {
       console.error("Error fetching cart data:", error);
@@ -22,7 +25,7 @@ export default function CartPage() {
 
   const clearCart = async () => {
     try {
-      await axios.delete("/itens");
+      await axios.delete(`/itens/${userId}`);
       console.log("Carrinho esvaziado com sucesso!");
     } catch (err) {
       console.error("Erro ao esvaziar o carrinho:", err);

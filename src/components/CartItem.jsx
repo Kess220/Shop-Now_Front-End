@@ -9,7 +9,7 @@ const CartItem = ({ item }) => {
   return (
     <HomeContainer>
       <ProductContainer>
-        <ProductImage src={item.imgs} alt="foto" />
+        <ProductImage src={item.imgs[0]} alt="foto" />
         <ProductInfo>
           <ProductName>{item.modelo}</ProductName>
           <PriceContainer>
