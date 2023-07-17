@@ -12,7 +12,10 @@ const SendEmail = async (userEmail, userName, city, zip, quantity, selectedProdu
       produto: selectedProduct?.modelo,
       preco: selectedProduct?.preco,
       quantidade: quantity,
-      total: selectedProduct?.preco * quantity,
+      total: (selectedProduct?.preco * quantity).toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+      }),
       destinatario: userEmail,
     });
     console.log('E-mail enviado com sucesso para',userEmail,userName);
