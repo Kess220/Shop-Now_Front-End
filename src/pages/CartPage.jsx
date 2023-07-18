@@ -58,25 +58,25 @@ export default function CartPage() {
     fetchUserData();
   }, [userId]);
 
-  useEffect(() => {
-    const fetchCartItems = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}cart`,
-          {
-            headers: { Authorization: localStorage.getItem("token") },
-          }
-        );
-        const cartItemsData = response.data || [];
-        setCartItems(cartItemsData);
-        console.log(cartItemsData);
-      } catch (error) {
-        console.error("Error fetching cart items:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchCartItems = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `${import.meta.env.VITE_API_URL}cart`,
+  //         {
+  //           headers: { Authorization: localStorage.getItem("token") },
+  //         }
+  //       );
+  //       const cartItemsData = response.data || [];
+  //       setCartItems(cartItemsData);
+  //       console.log(cartItemsData);
+  //     } catch (error) {
+  //       console.error("Error fetching cart items:", error);
+  //     }
+  //   };
 
-    fetchCartItems();
-  }, []);
+  //   fetchCartItems();
+  // }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
