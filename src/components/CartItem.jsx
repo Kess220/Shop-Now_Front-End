@@ -116,8 +116,7 @@ const ProductContainer = styled.div`
   margin: 10px;
   background-color: white;
   border-radius: 4px;
-  min-width: 200px;
-  flex-shrink: 0;
+  width: 350px;
 `;
 
 const ProductImage = styled.img`
